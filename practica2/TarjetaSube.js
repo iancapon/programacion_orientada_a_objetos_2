@@ -15,10 +15,14 @@ class TarjetaSube {
     }
 
     pagarViaje(monto_a_descontar){
-        if(this.mi_saldo-monto_a_descontar < TarjetaSube.SALDO_MINIMO){
+        this.verificarSaldoSuficienteParaViajar(monto_a_descontar)
+        this.mi_saldo -= monto_a_descontar
+    }
+
+    verificarSaldoSuficienteParaViajar(monto_a_descontar) {
+        if (this.mi_saldo - monto_a_descontar < TarjetaSube.SALDO_MINIMO) {
             throw new Error("Saldo insuficiente.")
         }
-        this.mi_saldo-=monto_a_descontar
     }
 }
 
