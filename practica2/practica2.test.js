@@ -1,4 +1,22 @@
 const TarjetaSube = require('./TarjetaSube');
+const SistemaCentralizado = require("./SistemaCentralizado");
+
+describe("Sistema Centralizado",() => {
+  let sistema = null;
+  
+  beforeEach(()=>{
+    sistema=new SistemaCentralizado()
+  })
+
+  test("1",()=>{
+    let tarjeta1 = new TarjetaSube(213)
+    let tarjeta2 = new TarjetaSube(454)
+
+    sistema.cargarTarjeta(tarjeta1.mi_id,2000)
+    sistema.cargarTarjeta(tarjeta1.mi_id,3000)
+    expect(sistema.cantidadRecargasPendientes(tarjeta1)).toEqual(2)
+  })
+})
 
 describe("Tarjeta Sube", () => {
   let tarjeta = null;
