@@ -9,6 +9,9 @@ class TarjetaSube {
     obtenerSaldo(){
         return this.mi_saldo
     }
+    obtenerId(){
+        return this.mi_id
+    }
 
     cargarSaldo(saldo_a_cargar){
         this.mi_saldo+=saldo_a_cargar
