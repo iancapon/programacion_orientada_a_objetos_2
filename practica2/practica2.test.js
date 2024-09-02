@@ -1,11 +1,10 @@
 const TarjetaSube = require('./TarjetaSube');
-const SistemaCentralizado = require("./SistemaCentralizado");
+const sistema = require("./SistemaCentralizado");
 
 describe("Sistema Centralizado",() => {
-  let sistema = null;
   
   beforeEach(()=>{
-    sistema=new SistemaCentralizado()
+    sistema.tarjetas=[]
   })
 
   test("Validar que encuentra las cargas pendientes",()=>{

@@ -1,18 +1,17 @@
-class SistemaCentralizado{
-    constructor(){
-        this.tarjetas=[]
-    }
-    cargarTarjeta(id,monto){
+const SistemaCentralizado={//// ahora es un objeto literal
+    tarjetas:[],
+    
+    cargarTarjeta:function(id,monto){
         this.tarjetas.push({id:id,monto:monto})
-    }
-    encontrarCargasPendientes(tarjeta){
+    },
+    encontrarCargasPendientes:function(tarjeta){
         return this.tarjetas.filter(tarj=>tarj.id===tarjeta.obtenerId())
-    }
-    cantidadRecargasPendientes(tarjeta){
+    },
+    cantidadRecargasPendientes:function(tarjeta){
         let cargas=this.encontrarCargasPendientes(tarjeta)
         return cargas.length
-    }
-    acreditarSaldo(tarjeta){
+    },
+    acreditarSaldo:function(tarjeta){
         // VERSION 1
         let cargas=this.encontrarCargasPendientes(tarjeta) 
         cargas.map(carga=>{
