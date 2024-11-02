@@ -1,4 +1,4 @@
-const FechaAnual = function(dia,mes){
+const DiaMes = function(dia,mes){
     this.dia = () => dia
     this.mes = () => mes
 
@@ -7,4 +7,4 @@ const FechaAnual = function(dia,mes){
     }
 }
 
-module.exports = FechaAnual
+module.exports = DiaMes

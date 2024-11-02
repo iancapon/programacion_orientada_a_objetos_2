@@ -9,6 +9,8 @@ const FechaExacta = function(dia,mes,anio){
     this.soyLaMismaFecha = function(otra){
         return otra.dia() === this.dia() && otra.mes() === this.mes() && otra.anio() === this.anio()
     }
+
+    this.toString = ()=> fecha.toString()
 }
 
 module.exports = FechaExacta
