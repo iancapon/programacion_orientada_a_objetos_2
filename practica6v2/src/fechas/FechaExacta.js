@@ -1,9 +1,9 @@
 const FechaExacta = function(dia,mes,anio){
-    const fecha = new Date(mes+"/"+dia+"/"+anio)
+    const fecha = new Date(String(mes)+"/"+String(dia)+"/"+String(anio))
 
-    this.dia = () => String(fecha.getDate())
-    this.mes = () => String(fecha.getMonth()+1)
-    this.anio = () => String(fecha.getFullYear())
+    this.dia = () => fecha.getDate()
+    this.mes = () => fecha.getMonth()+1
+    this.anio = () => fecha.getFullYear()
     this.diaSemana = () => fecha.getDay()
 
     this.soyLaMismaFecha = function(otra){
