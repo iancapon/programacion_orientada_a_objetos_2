@@ -12,10 +12,16 @@ const Cliente = function (nombre, linea) {
         this.cuenta += monto
     }
 
+    this.resumenDeSaldo = function () {
+        return `Le quedan: ${this.paquete.datosRestantes()} GB y ${this.paquete.minutosRestantes()} minutos. Vence en ${this.paquete.diasRestantes()} días.`
+    }
+
     this.consume = function (datos, minutos, fecha) {
         this.paquete.consumeDatos(datos)
         this.paquete.consumeMinutos(minutos)
         this.paquete.pasanDias(fecha)
+
+        return this.resumenDeSaldo()
     }
 
     this.validarDineroEnCuenta = function (paquete) {

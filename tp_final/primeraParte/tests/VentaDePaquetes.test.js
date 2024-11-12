@@ -34,6 +34,17 @@ test("Cliente adquiere un paquete, intenta adquirir otro antes de que se agote o
     expect(cliente.saldoEnCuenta()).toEqual(150)
 })
 
+test("Cliente consume algunos datos del paquete, sabe exactamente cuantos datos , minutos y dias le quedan.",()=>{
+    const cliente = new Cliente(nombre = "Pepe", linea = 1123456789)
+    const paquete_basico = new Paquete(gigabytes = 1, minutos = 100, dias = 7, precio = 150)
+
+    cliente.cargarEnCuenta(450)
+    cliente.comprarPaquete(paquete_basico, fechaDeCompra = new Date("01/01/2024"))
+
+    expect(cliente.consume(datos = 0.1, minutos = 20, fechaDeCompra = new Date("01/01/2024"))).toEqual("Le quedan: 0.9 GB y 80 minutos. Vence en 7 días.")
+    expect(cliente.consume(datos = 0.1, minutos = 20, fechaDeCompra = new Date("01/02/2024"))).toEqual("Le quedan: 0.8 GB y 60 minutos. Vence en 6 días.")
+})
+
 test("Cliente adquiere un paquete, se consumen los datos, adquiere otro paquete.", () => {
     const cliente = new Cliente(nombre = "Pepe", linea = 1123456789)
     const paquete_basico = new Paquete(gigabytes = 1, minutos = 100, dias = 7, precio = 150)
