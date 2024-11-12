@@ -1,5 +1,4 @@
 const Paquete = require("./Paquete")
-//const Consumo = require("./Consumo")
 
 const Cliente = function (nombre, linea) {
     this.nombre = nombre
