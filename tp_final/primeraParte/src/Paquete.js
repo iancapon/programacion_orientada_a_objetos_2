@@ -1,5 +1,5 @@
-const Paquete = function (gigabytes, minutos, dias, precio, fechaDeCompra) {
-    this.datos = gigabytes
+const Paquete = function (megabytes, minutos, dias, precio, fechaDeCompra) {
+    this.datos = megabytes
     this.minutos = minutos
     this.dias = dias
     this.precio = precio
@@ -7,7 +7,7 @@ const Paquete = function (gigabytes, minutos, dias, precio, fechaDeCompra) {
     this.ultimaFecha = fechaDeCompra
 
     this.renovar = function (fechaDeRenovacion) {
-        this.datos = gigabytes
+        this.datos = megabytes
         this.minutos = minutos
         this.dias = dias
         this.ultimaFecha = fechaDeRenovacion

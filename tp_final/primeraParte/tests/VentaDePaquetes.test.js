@@ -114,7 +114,47 @@ test("Se compra un paquete que se renueva cuando termina el tiempo, llegada la f
 
     cliente.cargarEnCuenta(160)
     cliente.comprarPaquete(paquete_basico, new Date("01/01/2024"), renueva = true)
-    
+
     expect(() => cliente.consume(datos = 0.1, minutos = 0, fecha = new Date("01/08/2024"))).toThrow(new Error("No fue posible comprar el paquete, falta saldo."))
     expect(cliente.saldoEnCuenta()).toEqual(10)
+})
+
+test("Se quiere obtener el historial entero de consumo para un cliente.", () => {
+    const cliente = new Cliente(nombre = "Pepe", linea = 1123456789)
+    const paquete_basico = new Paquete(gigabytes = 10, minutos = 100, dias = 7, precio = 150)
+
+    cliente.cargarEnCuenta(150)
+    cliente.comprarPaquete(paquete_basico, new Date("01/01/2024"))
+    cliente.consume(datos = 0.1, minutos = 0, fecha = new Date("01/01/2024"))
+    cliente.consume(datos = 0.3, minutos = 10, fecha = new Date("01/02/2024"))
+    cliente.consume(datos = 0.2, minutos = 0, fecha = new Date("01/03/2024"))
+    cliente.consume(datos = 0.7, minutos = 20, fecha = new Date("01/04/2024"))
+    cliente.consume(datos = 0.5, minutos = 0, fecha = new Date("01/05/2024"))
+
+    expect(cliente.consumosHastaLaFecha()).toEqual([
+        { datos: 0.1, minutos: 0, fecha: new Date("01/01/2024") },
+        { datos: 0.3, minutos: 10, fecha: new Date("01/02/2024") },
+        { datos: 0.2, minutos: 0, fecha: new Date("01/03/2024") },
+        { datos: 0.7, minutos: 20, fecha: new Date("01/04/2024") },
+        { datos: 0.5, minutos: 0, fecha: new Date("01/05/2024") },
+    ])
+})
+
+test("Se quiere obtener el historial de consumo para un cliente, entre dos fechas.", () => {
+    const cliente = new Cliente(nombre = "Pepe", linea = 1123456789)
+    const paquete_basico = new Paquete(gigabytes = 10, minutos = 100, dias = 7, precio = 150)
+
+    cliente.cargarEnCuenta(150)
+    cliente.comprarPaquete(paquete_basico, new Date("01/01/2024"))
+    cliente.consume(datos = 0.1, minutos = 0, fecha = new Date("01/01/2024"))
+    cliente.consume(datos = 0.3, minutos = 10, fecha = new Date("01/02/2024"))
+    cliente.consume(datos = 0.2, minutos = 0, fecha = new Date("01/03/2024"))
+    cliente.consume(datos = 0.7, minutos = 20, fecha = new Date("01/04/2024"))
+    cliente.consume(datos = 0.5, minutos = 0, fecha = new Date("01/05/2024"))
+
+    expect(cliente.consumosHastaLaFecha(inicial = new Date("01/02/2024"), final = new Date("01/04/2024"))).toEqual([
+        { datos: 0.3, minutos: 10, fecha: new Date("01/02/2024") },
+        { datos: 0.2, minutos: 0, fecha: new Date("01/03/2024") },
+        { datos: 0.7, minutos: 20, fecha: new Date("01/04/2024") },
+    ])
 })

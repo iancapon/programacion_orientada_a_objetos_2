@@ -5,8 +5,19 @@ const Cliente = function (nombre, linea) {
     this.linea = linea
     this.cuenta = 0//dinero en cuenta
 
-    this.paquete = new Paquete(gigabytes = 0, minutos = 0, dias = 0, precio = 0)//paquete vacio
+    this.paquete = new Paquete(megabytes = 0, minutos = 0, dias = 0, precio = 0)//paquete vacio
     this.renueva = false
+
+    this.consumos = []
+
+    this.consumosHastaLaFecha = function (inicial, final) {
+        //this.consumos.sort((a,b) => a.fecha.getTime() - b.fecha.getTime())
+        return this.consumos.filter(consumo => {
+            const condicion_inicial = inicial == undefined ? true : consumo.fecha.getTime() >= inicial.getTime()
+            const conficion_final = final == undefined ? true : consumo.fecha.getTime() <= final.getTime()
+            return condicion_inicial == conficion_final
+        })
+    }
 
     this.cargarEnCuenta = function (monto) {
         this.cuenta += monto
@@ -16,7 +27,7 @@ const Cliente = function (nombre, linea) {
         return `Le quedan: ${this.paquete.datosRestantes()} GB y ${this.paquete.minutosRestantes()} minutos. Vence en ${this.paquete.diasRestantes()} días.`
     }
 
-    this.renovarSiEsValido = function(fecha){
+    this.renovarSiEsValido = function (fecha) {
         if (this.paquete.pasanDias(fecha) && this.renueva) {
             this.validarDineroEnCuenta(this.paquete)
             this.paquete.renovar(fecha)
@@ -28,7 +39,10 @@ const Cliente = function (nombre, linea) {
         this.paquete.consumeDatos(datos)
         this.paquete.consumeMinutos(minutos)
         this.paquete.pasanDias(fecha)
+
         this.renovarSiEsValido(fecha)
+
+        this.consumos.push({ datos: datos, minutos: minutos, fecha: fecha })
 
         return this.resumenDeSaldo()
     }
