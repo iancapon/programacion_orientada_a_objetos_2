@@ -1,4 +1,5 @@
 const Paquete = require("./Paquete")
+//const Consumo = require("./Consumo")
 
 const Cliente = function (nombre, linea) {
     this.nombre = nombre
@@ -35,7 +36,7 @@ const Cliente = function (nombre, linea) {
     }
 
     this.consumosHastaLaFecha = function (inicial, final) {
-        this.consumos.sort((a,b) => a.fecha.getTime() - b.fecha.getTime())
+        this.consumos.sort((a, b) => a.fecha.getTime() - b.fecha.getTime())
         return this.consumos.filter(consumo => {
             const condicion_inicial = inicial == undefined ? true : consumo.fecha.getTime() >= inicial.getTime()
             const conficion_final = final == undefined ? true : consumo.fecha.getTime() <= final.getTime()
@@ -51,14 +52,10 @@ const Cliente = function (nombre, linea) {
         }
     }
 
-    this.consume = function (datos, minutos, fecha) {
-        this.paquete.consumeDatos(datos)
-        this.paquete.consumeMinutos(minutos)
-        this.paquete.consumeDias(fecha)
-
-        this.renovarSiEsValido(fecha)
-
-        this.consumos.push({ datos: datos, minutos: minutos, fecha: fecha })
+    this.consume = function (consumo) {
+        consumo.efectuarConsumo(this.paquete)
+        this.renovarSiEsValido(consumo.obtenerFecha())
+        this.consumos.push(consumo.obtenerResumen())
 
         return this.resumenDeSaldo()
     }

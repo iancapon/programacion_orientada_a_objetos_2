@@ -47,8 +47,8 @@ describe("Consumo de datos.", () => {
         cliente.cargarEnCuenta(450)
         cliente.comprarPaquete(paquete_basico, fechaDeCompra = new Date("01/01/2024"))
 
-        expect(cliente.consume(datos = 0.1, minutos = 20, fechaDeCompra = new Date("01/01/2024"))).toEqual("Le quedan: 0.9 GB y 80 minutos. Vence en 7 días.")
-        expect(cliente.consume(datos = 0.1, minutos = 20, fechaDeCompra = new Date("01/02/2024"))).toEqual("Le quedan: 0.8 GB y 60 minutos. Vence en 6 días.")
+        expect(cliente.consume(new Consumo(datos = 0.1, minutos = 20, fechaDeCompra = new Date("01/01/2024")))).toEqual("Le quedan: 0.9 GB y 80 minutos. Vence en 7 días.")
+        expect(cliente.consume(new Consumo(datos = 0.1, minutos = 20, fechaDeCompra = new Date("01/02/2024")))).toEqual("Le quedan: 0.8 GB y 60 minutos. Vence en 6 días.")
     })
 
     test("Cliente adquiere un paquete, se consumen los datos, adquiere otro paquete.", () => {
@@ -58,7 +58,7 @@ describe("Consumo de datos.", () => {
 
         cliente.cargarEnCuenta(450)
         cliente.comprarPaquete(paquete_basico, fechaDeCompra = new Date("01/01/2024"))
-        cliente.consume(datos = 1, minutos = 0, fechaDeCompra = new Date("01/08/2024"))
+        cliente.consume(new Consumo(datos = 1, minutos = 0, fechaDeCompra = new Date("01/08/2024")))
 
         expect(cliente.comprarPaquete(paquete_intermedio, fechaDeCompra = new Date("01/08/2024"))).toEqual("Paquete comprado: 2 GB, 500 minutos, 7 dias, 300 pesos.")
         expect(cliente.saldoEnCuenta()).toEqual(0)
@@ -71,7 +71,7 @@ describe("Consumo de datos.", () => {
 
         cliente.cargarEnCuenta(450)
         cliente.comprarPaquete(paquete_basico, new Date("01/01/2024"))
-        cliente.consume(datos = 0, minutos = 100, new Date("01/01/2024"))
+        cliente.consume(new Consumo(datos = 0, minutos = 100, new Date("01/01/2024")))
 
         expect(cliente.comprarPaquete(paquete_intermedio, new Date("01/01/2024"))).toEqual("Paquete comprado: 2 GB, 500 minutos, 7 dias, 300 pesos.")
         expect(cliente.saldoEnCuenta()).toEqual(0)
@@ -84,7 +84,7 @@ describe("Consumo de datos.", () => {
 
         cliente.cargarEnCuenta(450)
         cliente.comprarPaquete(paquete_basico, new Date("01/01/2024"))
-        cliente.consume(datos = 0, minutos = 0, new Date("01/08/2024"))
+        cliente.consume(new Consumo(datos = 0, minutos = 0, new Date("01/08/2024")))
 
 
         expect(cliente.comprarPaquete(paquete_intermedio, new Date("01/08/2024"))).toEqual("Paquete comprado: 2 GB, 500 minutos, 7 dias, 300 pesos.")
@@ -98,9 +98,8 @@ describe("Consumo de datos.", () => {
         cliente.cargarEnCuenta(450)
         cliente.comprarPaquete(paquete_basico, new Date("01/01/2024"))
 
-        expect(() => cliente.consume(datos = 2, minutos = 0, fecha = new Date("01/01/2024"))).toThrow(new Error("No se puede consumir esa cantidad de datos."))
-        expect(() => cliente.consume(datos = 0, minutos = 110, fecha = new Date("01/01/2024"))).toThrow(new Error("No se puede consumir esa cantidad de minutos."))
-        expect(() => cliente.consume(datos = 0, minutos = 0, fecha = new Date("01/09/2024"))).toThrow(new Error("No se puede consumir esa cantidad de dias."))
+        expect(() => cliente.consume(new Consumo(datos = 0, minutos = 110, fecha = new Date("01/01/2024")))).toThrow(new Error("No se puede consumir esa cantidad de minutos."))
+        expect(() => cliente.consume(new Consumo(datos = 0, minutos = 0, fecha = new Date("01/09/2024")))).toThrow(new Error("No se puede consumir esa cantidad de dias."))
     })
 
     test("Se compra un paquete que se renueva cuando termina el tiempo, llegada la fecha este se renueva si alcanza el dinero en cuenta.", () => {
@@ -110,7 +109,7 @@ describe("Consumo de datos.", () => {
         cliente.cargarEnCuenta(300)
         cliente.comprarPaquete(paquete_basico, new Date("01/01/2024"), renueva = true)
 
-        expect(cliente.consume(datos = 0.1, minutos = 0, fecha = new Date("01/08/2024"))).toEqual("Le quedan: 1 GB y 100 minutos. Vence en 7 días.")
+        expect(cliente.consume(new Consumo(datos = 0.1, minutos = 0, fecha = new Date("01/08/2024")))).toEqual("Le quedan: 1 GB y 100 minutos. Vence en 7 días.")
         expect(cliente.saldoEnCuenta()).toEqual(0)
     })
 
@@ -121,7 +120,7 @@ describe("Consumo de datos.", () => {
         cliente.cargarEnCuenta(160)
         cliente.comprarPaquete(paquete_basico, new Date("01/01/2024"), renueva = true)
 
-        expect(() => cliente.consume(datos = 0.1, minutos = 0, fecha = new Date("01/08/2024"))).toThrow(new Error("No fue posible comprar el paquete, falta saldo."))
+        expect(() => cliente.consume(new Consumo(datos = 0.1, minutos = 0, fecha = new Date("01/08/2024")))).toThrow(new Error("No fue posible comprar el paquete, falta saldo."))
         expect(cliente.saldoEnCuenta()).toEqual(10)
     })
 })
@@ -133,11 +132,11 @@ describe("Historial de consumo.", () => {
 
         cliente.cargarEnCuenta(150)
         cliente.comprarPaquete(paquete_basico, new Date("01/01/2024"))
-        cliente.consume(datos = 0.1, minutos = 0, fecha = new Date("01/01/2024"))
-        cliente.consume(datos = 0.3, minutos = 10, fecha = new Date("01/02/2024"))
-        cliente.consume(datos = 0.2, minutos = 0, fecha = new Date("01/03/2024"))
-        cliente.consume(datos = 0.7, minutos = 20, fecha = new Date("01/04/2024"))
-        cliente.consume(datos = 0.5, minutos = 0, fecha = new Date("01/05/2024"))
+        cliente.consume(new Consumo(datos = 0.1, minutos = 0, fecha = new Date("01/01/2024")))
+        cliente.consume(new Consumo(datos = 0.3, minutos = 10, fecha = new Date("01/02/2024")))
+        cliente.consume(new Consumo(datos = 0.2, minutos = 0, fecha = new Date("01/03/2024")))
+        cliente.consume(new Consumo(datos = 0.7, minutos = 20, fecha = new Date("01/04/2024")))
+        cliente.consume(new Consumo(datos = 0.5, minutos = 0, fecha = new Date("01/05/2024")))
 
         expect(cliente.consumosHastaLaFecha()).toEqual([
             { datos: 0.1, minutos: 0, fecha: new Date("01/01/2024") },
@@ -154,11 +153,11 @@ describe("Historial de consumo.", () => {
 
         cliente.cargarEnCuenta(150)
         cliente.comprarPaquete(paquete_basico, new Date("01/01/2024"))
-        cliente.consume(datos = 0.1, minutos = 0, fecha = new Date("01/01/2024"))
-        cliente.consume(datos = 0.3, minutos = 10, fecha = new Date("01/02/2024"))
-        cliente.consume(datos = 0.2, minutos = 0, fecha = new Date("01/03/2024"))
-        cliente.consume(datos = 0.7, minutos = 20, fecha = new Date("01/04/2024"))
-        cliente.consume(datos = 0.5, minutos = 0, fecha = new Date("01/05/2024"))
+        cliente.consume(new Consumo(datos = 0.1, minutos = 0, fecha = new Date("01/01/2024")))
+        cliente.consume(new Consumo(datos = 0.3, minutos = 10, fecha = new Date("01/02/2024")))
+        cliente.consume(new Consumo(datos = 0.2, minutos = 0, fecha = new Date("01/03/2024")))
+        cliente.consume(new Consumo(datos = 0.7, minutos = 20, fecha = new Date("01/04/2024")))
+        cliente.consume(new Consumo(datos = 0.5, minutos = 0, fecha = new Date("01/05/2024")))
 
         expect(cliente.consumosHastaLaFecha(inicial = new Date("01/02/2024"), final = new Date("01/04/2024"))).toEqual([
             { datos: 0.3, minutos: 10, fecha: new Date("01/02/2024") },
