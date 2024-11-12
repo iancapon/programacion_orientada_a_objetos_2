@@ -6,7 +6,7 @@ const Paquete = function (gigabytes, minutos, dias, precio, fechaDeCompra) {
 
     this.ultimaFecha = fechaDeCompra
 
-    this.seCompraEn = function (fecha) { this.ultimaFecha = fecha }
+    this.seCompraEn = function (fecha) { this.ultimaFecha = fecha == undefined ? this.ultimaFecha : fecha }
 
     this.resumenDelPlan = function () {
         return this.datos + " GB, " + this.minutos + " minutos, " + this.dias + " dias, " + this.precio + " pesos."
