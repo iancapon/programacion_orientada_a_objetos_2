@@ -1,5 +1,6 @@
 const Cliente = require("../src/Cliente")
 const Paquete = require("../src/Paquete")
+const Consumo = require("../src/Consumo")
 
 describe("Compra de paquetes", () => {
     test("Cliente compra un paquete, el sistema le debita de la cuenta", () => {
