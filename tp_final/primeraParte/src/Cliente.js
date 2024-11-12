@@ -11,7 +11,7 @@ const Cliente = function (nombre, linea) {
     this.consumos = []
 
     this.consumosHastaLaFecha = function (inicial, final) {
-        //this.consumos.sort((a,b) => a.fecha.getTime() - b.fecha.getTime())
+        this.consumos.sort((a,b) => a.fecha.getTime() - b.fecha.getTime())
         return this.consumos.filter(consumo => {
             const condicion_inicial = inicial == undefined ? true : consumo.fecha.getTime() >= inicial.getTime()
             const conficion_final = final == undefined ? true : consumo.fecha.getTime() <= final.getTime()
