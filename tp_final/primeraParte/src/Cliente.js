@@ -39,7 +39,7 @@ const Cliente = function (nombre, linea) {
         this.paquete.seCompraEn(fechaDeCompra)
         this.cuenta -= paquete.cuesta()
 
-        return "Paquete comprado: " + paquete.resumen()
+        return "Paquete comprado: " + paquete.resumenDelPlan()
     }
 
     this.saldoEnCuenta = function () {

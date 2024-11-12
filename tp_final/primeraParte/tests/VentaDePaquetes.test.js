@@ -54,7 +54,7 @@ test("Cliente adquiere un paquete, se consumen los minutos, adquiere otro paquet
 
     cliente.cargarEnCuenta(450)
     cliente.comprarPaquete(paquete_basico, new Date("01/01/2024"))
-    cliente.consume(datos = 0, minutos = 500, new Date("01/01/2024"))
+    cliente.consume(datos = 0, minutos = 100, new Date("01/01/2024"))
 
     expect(cliente.comprarPaquete(paquete_intermedio, new Date("01/01/2024"))).toEqual("Paquete comprado: 2 GB, 500 minutos, 7 dias, 300 pesos.")
     expect(cliente.saldoEnCuenta()).toEqual(0)
@@ -72,4 +72,16 @@ test("Cliente adquiere un paquete, ya han pasado los dias y ha vencido, adquiere
 
     expect(cliente.comprarPaquete(paquete_intermedio, new Date("01/08/2024"))).toEqual("Paquete comprado: 2 GB, 500 minutos, 7 dias, 300 pesos.")
     expect(cliente.saldoEnCuenta()).toEqual(0)
+})
+
+test("Se intenta consumir más de lo que permite el paquete, no se puede.", () => {
+    const cliente = new Cliente(nombre = "Pepe", linea = 1123456789)
+    const paquete_basico = new Paquete(gigabytes = 1, minutos = 100, dias = 7, precio = 150)
+
+    cliente.cargarEnCuenta(450)
+    cliente.comprarPaquete(paquete_basico, new Date("01/01/2024"))
+
+    expect(() => cliente.consume(datos = 2, minutos = 0, fecha = new Date("01/01/2024"))).toThrow(new Error("No se puede consumir esa cantidad de datos."))
+    expect(() => cliente.consume(datos = 0, minutos = 110, fecha = new Date("01/01/2024"))).toThrow(new Error("No se puede consumir esa cantidad de minutos."))
+    expect(() => cliente.consume(datos = 0, minutos = 0, fecha = new Date("01/09/2024"))).toThrow(new Error("No se puede consumir esa cantidad de dias."))
 })

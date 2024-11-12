@@ -4,25 +4,50 @@ const Paquete = function (gigabytes, minutos, dias, precio, fechaDeCompra) {
     this.dias = dias
     this.precio = precio
 
-    this.fechaDeCompra = fechaDeCompra
+    this.ultimaFecha = fechaDeCompra
 
-    this.seCompraEn = function (fecha) { this.fechaDeCompra = fecha }
+    this.seCompraEn = function (fecha) { this.ultimaFecha = fecha }
 
-    this.resumen = function () {
+    this.resumenDelPlan = function () {
         return this.datos + " GB, " + this.minutos + " minutos, " + this.dias + " dias, " + this.precio + " pesos."
     }
 
     this.cuesta = function () { return this.precio }
 
+
+    this.validarDatosPasados = function (datos) {
+        if (this.datos - datos < 0) {
+            throw new Error("No se puede consumir esa cantidad de datos.")
+        }
+    }
     this.consumeDatos = function (datos) {
+        this.validarDatosPasados(datos)
         this.datos -= datos
     }
+
+    this.validarMinutosPasados = function (minutos) {
+        if (this.minutos - minutos < 0) {
+            throw new Error("No se puede consumir esa cantidad de minutos.")
+        }
+    }
     this.consumeMinutos = function (minutos) {
+        this.validarMinutosPasados(minutos)
         this.minutos -= minutos
     }
+
+    this.calcularDiferenciaDeDias = function (fecha) {
+        return (fecha.getTime() - this.ultimaFecha.getTime()) / (1000 * 60 * 60 * 24) // de milisegundos a dias
+    }
+    this.validarDiasPasados = function (fecha) {
+        if (this.dias - this.calcularDiferenciaDeDias(fecha) < 0) {
+            throw new Error("No se puede consumir esa cantidad de dias.")
+        }
+    }
     this.pasanDias = function (fecha) {
-        if (this.fechaDeCompra != undefined) {
-            this.dias -= (fecha.getTime() - this.fechaDeCompra.getTime()) / (1000 * 60 * 60 * 24) // de milisegundos a dias
+        if (this.ultimaFecha != undefined) {
+            this.validarDiasPasados(fecha)
+            this.dias -= this.calcularDiferenciaDeDias(fecha)
+            this.ultimaFecha = fecha
         }
 
     }
