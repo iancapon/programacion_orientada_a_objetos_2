@@ -11,6 +11,7 @@ test("Cliente compra un paquete, el sistema le debita de la cuenta", () => {
     expect(cliente.saldoEnCuenta()).toEqual(50)
 })
 
+
 test("Cliente intenta compra un paquete, el sistema detecta faltante de dinero en la cuenta.", () => {
     const cliente = new Cliente(nombre = "Pepe", linea = 1123456789)
     const paquete_basico = new Paquete(gigabytes = 1, minutos = 100, dias = 7, precio = 150)
@@ -39,10 +40,10 @@ test("Cliente adquiere un paquete, se consumen los datos, adquiere otro paquete.
     const paquete_intermedio = new Paquete(gigabytes = 2, minutos = 500, dias = 7, precio = 300)
 
     cliente.cargarEnCuenta(450)
-    cliente.comprarPaquete(paquete_basico)
-    cliente.consume(datos = 1, minutos = 0, dias = 0)
+    cliente.comprarPaquete(paquete_basico, fechaDeCompra = new Date("01/01/2024"))
+    cliente.consume(datos = 1, minutos = 0, fechaDeCompra = new Date("01/08/2024"))
 
-    expect(cliente.comprarPaquete(paquete_intermedio)).toEqual("Paquete comprado: 2 GB, 500 minutos, 7 dias, 300 pesos.")
+    expect(cliente.comprarPaquete(paquete_intermedio, fechaDeCompra = new Date("01/08/2024"))).toEqual("Paquete comprado: 2 GB, 500 minutos, 7 dias, 300 pesos.")
     expect(cliente.saldoEnCuenta()).toEqual(0)
 })
 
@@ -52,10 +53,10 @@ test("Cliente adquiere un paquete, se consumen los minutos, adquiere otro paquet
     const paquete_intermedio = new Paquete(gigabytes = 2, minutos = 500, dias = 7, precio = 300)
 
     cliente.cargarEnCuenta(450)
-    cliente.comprarPaquete(paquete_basico)
-    cliente.consume(datos = 0, minutos = 500, dias = 0)
+    cliente.comprarPaquete(paquete_basico, new Date("01/01/2024"))
+    cliente.consume(datos = 0, minutos = 500, new Date("01/01/2024"))
 
-    expect(cliente.comprarPaquete(paquete_intermedio)).toEqual("Paquete comprado: 2 GB, 500 minutos, 7 dias, 300 pesos.")
+    expect(cliente.comprarPaquete(paquete_intermedio, new Date("01/01/2024"))).toEqual("Paquete comprado: 2 GB, 500 minutos, 7 dias, 300 pesos.")
     expect(cliente.saldoEnCuenta()).toEqual(0)
 })
 
@@ -65,10 +66,10 @@ test("Cliente adquiere un paquete, ya han pasado los dias y ha vencido, adquiere
     const paquete_intermedio = new Paquete(gigabytes = 2, minutos = 500, dias = 7, precio = 300)
 
     cliente.cargarEnCuenta(450)
-    cliente.comprarPaquete(paquete_basico)
-    cliente.consume(datos = 0, minutos = 0, dias = 7)
+    cliente.comprarPaquete(paquete_basico, new Date("01/01/2024"))
+    cliente.consume(datos = 0, minutos = 0, new Date("01/08/2024"))
 
 
-    expect(cliente.comprarPaquete(paquete_intermedio)).toEqual("Paquete comprado: 2 GB, 500 minutos, 7 dias, 300 pesos.")
+    expect(cliente.comprarPaquete(paquete_intermedio, new Date("01/08/2024"))).toEqual("Paquete comprado: 2 GB, 500 minutos, 7 dias, 300 pesos.")
     expect(cliente.saldoEnCuenta()).toEqual(0)
 })

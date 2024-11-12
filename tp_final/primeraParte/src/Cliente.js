@@ -6,15 +6,16 @@ const Cliente = function (nombre, linea) {
     this.cuenta = 0//dinero en cuenta
 
     this.paquete = new Paquete(gigabytes = 0, minutos = 0, dias = 0, precio = 0)//paquete vacio
+    this.renueva = false
 
     this.cargarEnCuenta = function (monto) {
         this.cuenta += monto
     }
 
-    this.consume = function (datos, minutos, dias) {
+    this.consume = function (datos, minutos, fecha) {
         this.paquete.consumeDatos(datos)
         this.paquete.consumeMinutos(minutos)
-        this.paquete.pasanDias(dias)
+        this.paquete.pasanDias(fecha)
     }
 
     this.validarDineroEnCuenta = function (paquete) {
@@ -30,11 +31,12 @@ const Cliente = function (nombre, linea) {
     }
 
 
-    this.comprarPaquete = function (paquete) {
+    this.comprarPaquete = function (paquete, fechaDeCompra) {
         this.validarDineroEnCuenta(paquete)
         this.validarPaqueteVencido_Agotado()
 
         this.paquete = paquete
+        this.paquete.seCompraEn(fechaDeCompra)
         this.cuenta -= paquete.cuesta()
 
         return "Paquete comprado: " + paquete.resumen()

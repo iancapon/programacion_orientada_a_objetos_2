@@ -1,8 +1,12 @@
-const Paquete = function (gigabytes, minutos, dias, precio) {
+const Paquete = function (gigabytes, minutos, dias, precio, fechaDeCompra) {
     this.datos = gigabytes
     this.minutos = minutos
     this.dias = dias
     this.precio = precio
+
+    this.fechaDeCompra = fechaDeCompra
+
+    this.seCompraEn = function (fecha) { this.fechaDeCompra = fecha }
 
     this.resumen = function () {
         return this.datos + " GB, " + this.minutos + " minutos, " + this.dias + " dias, " + this.precio + " pesos."
@@ -10,14 +14,17 @@ const Paquete = function (gigabytes, minutos, dias, precio) {
 
     this.cuesta = function () { return this.precio }
 
-    this.consumeDatos=function(datos){
+    this.consumeDatos = function (datos) {
         this.datos -= datos
     }
-    this.consumeMinutos=function(minutos){
+    this.consumeMinutos = function (minutos) {
         this.minutos -= minutos
     }
-    this.pasanDias=function(dias){
-        this.dias -= dias
+    this.pasanDias = function (fecha) {
+        if (this.fechaDeCompra != undefined) {
+            this.dias -= (fecha.getTime() - this.fechaDeCompra.getTime()) / (1000 * 60 * 60 * 24) // de milisegundos a dias
+        }
+
     }
 
     this.datosRestantes = function () {
