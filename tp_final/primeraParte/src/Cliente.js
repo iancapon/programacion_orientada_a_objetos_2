@@ -1,24 +1,40 @@
+const Paquete = require("./Paquete")
+
 const Cliente = function (nombre, linea) {
     this.nombre = nombre
     this.linea = linea
     this.cuenta = 0//dinero en cuenta
 
-    this.paquetes = []
+    this.paquete = new Paquete(gigabytes = 0, minutos = 0, dias = 0, precio = 0)//paquete vacio
 
     this.cargarEnCuenta = function (monto) {
         this.cuenta += monto
     }
 
+    this.consume = function (datos, minutos, dias) {
+        this.paquete.consumeDatos(datos)
+        this.paquete.consumeMinutos(minutos)
+        this.paquete.pasanDias(dias)
+    }
+
     this.validarDineroEnCuenta = function (paquete) {
         if (this.cuenta - paquete.cuesta() < 0) {
-            throw new Error("No fue posible comprar el paquete, falta dinero.")
+            throw new Error("No fue posible comprar el paquete, falta saldo.")
         }
     }
 
+    this.validarPaqueteVencido_Agotado = function () {
+        if (this.paquete.diasRestantes() > 0 && this.paquete.datosRestantes() > 0 && this.paquete.minutosRestantes() > 0) {
+            throw new Error("No fue posible comprar el paquete, ya hay un paquete activo.")
+        }
+    }
+
+
     this.comprarPaquete = function (paquete) {
         this.validarDineroEnCuenta(paquete)
+        this.validarPaqueteVencido_Agotado()
 
-        this.paquetes.push(paquete)
+        this.paquete = paquete
         this.cuenta -= paquete.cuesta()
 
         return "Paquete comprado: " + paquete.resumen()
