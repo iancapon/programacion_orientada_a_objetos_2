@@ -44,12 +44,9 @@ const Paquete = function (gigabytes, minutos, dias, precio, fechaDeCompra) {
         }
     }
     this.pasanDias = function (fecha) {
-        if (this.ultimaFecha != undefined) {
-            this.validarDiasPasados(fecha)
-            this.dias -= this.calcularDiferenciaDeDias(fecha)
-            this.ultimaFecha = fecha
-        }
-
+        this.validarDiasPasados(fecha)
+        this.dias -= this.calcularDiferenciaDeDias(fecha)
+        this.ultimaFecha = fecha
     }
 
     this.datosRestantes = function () {
