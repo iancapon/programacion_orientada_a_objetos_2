@@ -6,6 +6,13 @@ const Paquete = function (gigabytes, minutos, dias, precio, fechaDeCompra) {
 
     this.ultimaFecha = fechaDeCompra
 
+    this.renovar = function (fechaDeRenovacion) {
+        this.datos = gigabytes
+        this.minutos = minutos
+        this.dias = dias
+        this.ultimaFecha = fechaDeRenovacion
+    }
+
     this.seCompraEn = function (fecha) { this.ultimaFecha = fecha == undefined ? this.ultimaFecha : fecha }
 
     this.resumenDelPlan = function () {
@@ -47,6 +54,8 @@ const Paquete = function (gigabytes, minutos, dias, precio, fechaDeCompra) {
         this.validarDiasPasados(fecha)
         this.dias -= this.calcularDiferenciaDeDias(fecha)
         this.ultimaFecha = fecha
+
+        return this.dias === 0//se termina el plan
     }
 
     this.datosRestantes = function () {

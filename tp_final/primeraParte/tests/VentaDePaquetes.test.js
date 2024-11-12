@@ -34,7 +34,7 @@ test("Cliente adquiere un paquete, intenta adquirir otro antes de que se agote o
     expect(cliente.saldoEnCuenta()).toEqual(150)
 })
 
-test("Cliente consume algunos datos del paquete, sabe exactamente cuantos datos , minutos y dias le quedan.",()=>{
+test("Cliente consume algunos datos del paquete, sabe exactamente cuantos datos , minutos y dias le quedan.", () => {
     const cliente = new Cliente(nombre = "Pepe", linea = 1123456789)
     const paquete_basico = new Paquete(gigabytes = 1, minutos = 100, dias = 7, precio = 150)
 
@@ -95,4 +95,26 @@ test("Se intenta consumir más de lo que permite el paquete, no se puede.", () =
     expect(() => cliente.consume(datos = 2, minutos = 0, fecha = new Date("01/01/2024"))).toThrow(new Error("No se puede consumir esa cantidad de datos."))
     expect(() => cliente.consume(datos = 0, minutos = 110, fecha = new Date("01/01/2024"))).toThrow(new Error("No se puede consumir esa cantidad de minutos."))
     expect(() => cliente.consume(datos = 0, minutos = 0, fecha = new Date("01/09/2024"))).toThrow(new Error("No se puede consumir esa cantidad de dias."))
+})
+
+test("Se compra un paquete que se renueva cuando termina el tiempo, llegada la fecha este se renueva si alcanza el dinero en cuenta.", () => {
+    const cliente = new Cliente(nombre = "Pepe", linea = 1123456789)
+    const paquete_basico = new Paquete(gigabytes = 1, minutos = 100, dias = 7, precio = 150)
+
+    cliente.cargarEnCuenta(300)
+    cliente.comprarPaquete(paquete_basico, new Date("01/01/2024"), renueva = true)
+
+    expect(cliente.consume(datos = 0.1, minutos = 0, fecha = new Date("01/08/2024"))).toEqual("Le quedan: 1 GB y 100 minutos. Vence en 7 días.")
+    expect(cliente.saldoEnCuenta()).toEqual(0)
+})
+
+test("Se compra un paquete que se renueva cuando termina el tiempo, llegada la fecha este no se renueva puesto que no alcanza el saldo", () => {
+    const cliente = new Cliente(nombre = "Pepe", linea = 1123456789)
+    const paquete_basico = new Paquete(gigabytes = 1, minutos = 100, dias = 7, precio = 150)
+
+    cliente.cargarEnCuenta(160)
+    cliente.comprarPaquete(paquete_basico, new Date("01/01/2024"), renueva = true)
+    
+    expect(() => cliente.consume(datos = 0.1, minutos = 0, fecha = new Date("01/08/2024"))).toThrow(new Error("No fue posible comprar el paquete, falta saldo."))
+    expect(cliente.saldoEnCuenta()).toEqual(10)
 })
