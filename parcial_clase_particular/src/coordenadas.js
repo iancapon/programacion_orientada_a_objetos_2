@@ -21,6 +21,25 @@ const Coordenadas = function(x, y){
         return new Coordenadas(this.x, this.y + valor)
     };
 
+    this.restar = function(coordenadas){
+        let resultado = coordenadas.restarEnElEjeX(this.x);
+        resultado = resultado.restarEnElEjeY(this.y);
+        return resultado;
+    }
+
+    this.restarEnElEjeX = function(valor){ 
+        return new Coordenadas(this.x - valor, this.y)
+    };
+
+    this.restarEnElEjeY = function(valor){ 
+        return new Coordenadas(this.x, this.y - valor)
+    };
+
+    this.saltosHacia = function(coordenada){
+        const valor = this.restar(coordenada)
+        return Math.abs(valor.toArray()[0]) + Math.abs(valor.toArray[1])
+    }
+
     this.dentroDe = function(puntoInferiorIsquierdo, puntoSuperiosDerecho){
         return this.mayorOIgual(puntoInferiorIsquierdo) 
             && this.menorOIgual(puntoSuperiosDerecho)

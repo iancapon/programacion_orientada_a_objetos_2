@@ -2,8 +2,8 @@ const MarsRover = require("../src/marsRover");
 const Mapa = require("../src/mapa");
 const Coordenadas = require("../src/coordenadas");
 
-const crearMarsRover = function (posicionInicialX, posicionInicialY, mapa = crearMapa(100, 100, [])) {
-    return new MarsRover(posicionInicialX, posicionInicialY, mapa);
+const crearMarsRover = function (posicionInicialX, posicionInicialY, mapa = crearMapa(100, 100, []), bateria) {
+    return new MarsRover(posicionInicialX, posicionInicialY, mapa, bateria);
 }
 
 const crearMapa = function (limiteSuperiorX, limiteSuperiorY, obstaculos = []){
