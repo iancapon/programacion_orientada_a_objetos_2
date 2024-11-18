@@ -17,18 +17,19 @@ const Bateria = function(inicial){
     }
 
 }
-
+//definimos bateria como bateriainicial
 const MarsRover = function (posicionInicialX, posicionInicialY, mapa, bateriaInicial) {
 
     this.posicionActual = new Coordenadas(posicionInicialX, posicionInicialY);
     this.mapa = mapa;
-
+    //aca defino el objeto
     this.bateria = new Bateria(bateriaInicial);
     this.estacion = new Coordenadas(posicionInicialX, posicionInicialY);
 
     this.obtenerBateria = function () {
         return this.bateria.obtenerBateria()
     }
+    //
     this.obtenerPosicionActual = function () {
         return this.posicionActual;
     };
@@ -86,7 +87,7 @@ const MarsRover = function (posicionInicialX, posicionInicialY, mapa, bateriaIni
         }
 
         this.posicionActual = resultadoDelMovimiento
-
+        //
         if (this.bateria != undefined) {
             if (this.posicionActual.saltosHacia(this.estacion) > this.bateria.obtenerBateria()) {
                 this.posicionActual = this.estacion
@@ -99,6 +100,7 @@ const MarsRover = function (posicionInicialX, posicionInicialY, mapa, bateriaIni
         if (this.posicionActual.equals(this.estacion)) {
             this.bateria.recargar()
         }
+        //
     }
 
 };

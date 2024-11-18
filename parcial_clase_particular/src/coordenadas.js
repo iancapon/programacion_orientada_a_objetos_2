@@ -22,7 +22,7 @@ const Coordenadas = function(x, y){
     };
 
     this.restar = function(coordenadas){
-        let resultado = coordenadas.restarEnElEjeX(this.x);
+        let resultado = coordenadas.restarEnElEjeX(this.x); 
         resultado = resultado.restarEnElEjeY(this.y);
         return resultado;
     }
@@ -34,13 +34,13 @@ const Coordenadas = function(x, y){
     this.restarEnElEjeY = function(valor){ 
         return new Coordenadas(this.x, this.y - valor)
     };
-
+    //
     this.saltosHacia = function(coordenada){
         let valor = this.restar(coordenada)
         let arreglo = valor.toArray()
         return Math.abs(arreglo[0]) + Math.abs(arreglo[1])
     }
-
+    //
     this.dentroDe = function(puntoInferiorIsquierdo, puntoSuperiosDerecho){
         return this.mayorOIgual(puntoInferiorIsquierdo) 
             && this.menorOIgual(puntoSuperiosDerecho)
