@@ -6,15 +6,15 @@ const crearCliente = function (nombre, linea) {
     return new Cliente(nombre, linea)
 }
 
-const crearConsumo = function (datos, minutos, fecha) {
-    return new Consumo(datos, minutos, fecha)
+const crearConsumo = function (datos, minutos, fecha, app) {
+    return new Consumo(datos, minutos, fecha, app)
 }
 
-const crearPaquete = function (megabytes, minutos, dias, precio, fechaDeCompra) {
-    return new Paquete(megabytes, minutos, dias, precio, fechaDeCompra)
+const crearPaquete = function (megabytes, minutos, dias, precio, fechaDeCompra, appsIlimitadas) {
+    return new Paquete(megabytes, minutos, dias, precio, fechaDeCompra, appsIlimitadas)
 }
 
-const crearFecha = function(fechaNotacionAnglosajona){
+const crearFecha = function (fechaNotacionAnglosajona) {
     return new Date(fechaNotacionAnglosajona)
 }
 

@@ -1,25 +1,23 @@
-const Consumo = function (Datos, Minutos, Fecha) {
+const Consumo = function (Datos, Minutos, Fecha, App) {
     this.datos = Datos
     this.minutos = Minutos
     this.fecha = Fecha
+    this.app = App
 
     this.obtenerResumen = function () {
-        return { datos: this.datos, minutos: this.minutos, fecha: this.fecha }
+        return { datos: this.datos, minutos: this.minutos, fecha: this.fecha, app: this.app }
     }
 
-    this.montoConsumido = function(){
+    this.montoConsumido = function () {
         const resumen = this.obtenerResumen()
+        if(this.app != undefined){
+            return `Has consumido ${resumen.datos} MB, y ${resumen.minutos} minutos, con la App ${resumen.app}, en la fecha ${resumen.fecha.toString()}.`
+        }
         return `Has consumido ${resumen.datos} MB, y ${resumen.minutos} minutos, en la fecha ${resumen.fecha.toString()}.`
     }
 
     this.obtenerFecha = function () {
         return this.fecha
-    }
-
-    this.efectuarConsumo = function (paquete) {
-        paquete.consumeDatos(this.datos)
-        paquete.consumeMinutos(this.minutos)
-        paquete.consumeDias(this.fecha)
     }
 
 }

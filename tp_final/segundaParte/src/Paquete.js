@@ -1,4 +1,4 @@
-const Paquete = function (megabytes, minutos, dias, precio, fechaDeCompra) {
+const Paquete = function (megabytes, minutos, dias, precio, fechaDeCompra, appsIlimitadas) {
     const INFO = {
         Datos: megabytes,
         Minutos: minutos,
@@ -10,6 +10,7 @@ const Paquete = function (megabytes, minutos, dias, precio, fechaDeCompra) {
     this.minutos = minutos
     this.dias = dias
     this.ultimaFecha = fechaDeCompra
+    this.appsIlimitadas = appsIlimitadas == undefined ? [] : appsIlimitadas 
 
     this.renovar = function (fechaDeRenovacion) {
         this.datos = INFO.Datos
@@ -68,6 +69,15 @@ const Paquete = function (megabytes, minutos, dias, precio, fechaDeCompra) {
         this.ultimaFecha = fecha
 
         return this.dias === 0//se termina el plan
+    }
+
+    this.consume = function (consumo) {
+        const resumen = consumo.obtenerResumen()
+        if (!this.appsIlimitadas.includes(resumen.app)) {
+            this.consumeDatos(resumen.datos)
+            this.consumeMinutos(resumen.minutos)
+            this.consumeDias(resumen.fecha)
+        }
     }
 
     this.datosRestantes = function () {

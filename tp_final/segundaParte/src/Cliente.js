@@ -63,7 +63,7 @@ const Cliente = function (nombre, linea) {
     }
 
     this.consume = function (consumo) {
-        consumo.efectuarConsumo(this.paquete)
+        this.paquete.consume(consumo)
         this.renovarSiEsValido(consumo.obtenerFecha())
         this.consumos.push(consumo.obtenerResumen())
 
