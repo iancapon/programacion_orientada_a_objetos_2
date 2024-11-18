@@ -38,15 +38,14 @@ describe("Compra de paquetes", () => {
 
 describe("Consumo de datos.", () => {
 
-    test("Cliente consume algunos datos del paquete, sabe exactamente cuantos datos , minutos y dias le quedan.", () => {
+    test("Cliente consume algunos datos del paquete, sabe exactamente cuanto consumió.", () => {
         const cliente = crearCliente(nombre = "Pepe", linea = 1123456789)
         const paquete_basico = crearPaquete(datos = 1000, minutos = 100, dias = 7, precio = 150)
 
         cliente.cargarEnCuenta(450)
         cliente.comprarPaquete(paquete_basico, fecha = crearFecha("01/01/2024"))
 
-        expect(cliente.consume(crearConsumo(datos = 100, minutos = 20, fecha = crearFecha("01/01/2024")))).toEqual("Le quedan: 900 MB y 80 minutos. Vence en 7 días.")
-        expect(cliente.consume(crearConsumo(datos = 100, minutos = 20, fecha = crearFecha("01/02/2024")))).toEqual("Le quedan: 800 MB y 60 minutos. Vence en 6 días.")
+        expect(cliente.consume(crearConsumo(datos = 100, minutos = 20, fecha = crearFecha("01/01/2024")))).toEqual("Has consumido 100 MB, y 20 minutos, en la fecha Mon Jan 01 2024 00:00:00 GMT-0300 (hora estándar de Argentina).")
     })
 
     test("Cliente consume algunos datos del paquete, posteriormente desea saber cuantos datos le quedan.", () => {
@@ -119,7 +118,8 @@ describe("Consumo de datos.", () => {
         cliente.cargarEnCuenta(300)
         cliente.comprarPaquete(paquete_basico, crearFecha("01/01/2024"), renueva = true)
 
-        expect(cliente.consume(crearConsumo(datos = 100, minutos = 0, fecha = crearFecha("01/08/2024")))).toEqual("Le quedan: 1000 MB y 100 minutos. Vence en 7 días.")
+        expect(cliente.consume(crearConsumo(datos = 100, minutos = 0, fecha = crearFecha("01/08/2024")))).toEqual("Has consumido 100 MB, y 0 minutos, en la fecha Mon Jan 08 2024 00:00:00 GMT-0300 (hora estándar de Argentina).")
+        expect(cliente.resumenDeSaldo()).toEqual("Le quedan: 1000 MB y 100 minutos. Vence en 7 días.")
         expect(cliente.saldoEnCuenta()).toEqual(0)
     })
 
