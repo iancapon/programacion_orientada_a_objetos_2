@@ -19,7 +19,7 @@ const Cliente = function (nombre, linea) {
     }
 
     this.resumenDeSaldo = function () {
-        return `Le quedan: ${this.paquete.datosRestantes()} GB y ${this.paquete.minutosRestantes()} minutos. Vence en ${this.paquete.diasRestantes()} días.`
+        return this.paquete.resumenDeSaldo()
     }
 
     this.validarDineroEnCuenta = function (paquete) {
@@ -34,12 +34,23 @@ const Cliente = function (nombre, linea) {
         }
     }
 
-    this.consumosHastaLaFecha = function (inicial, final) {
+    this.ordenarConsumosPorFecha = function () {
         this.consumos.sort((a, b) => a.fecha.getTime() - b.fecha.getTime())
+    }
+
+    this.consumosHastaLaFecha = function () {
+        this.ordenarConsumosPorFecha()
+        return this.consumos
+    }
+
+    this.dentroDeLaFecha = function (inicial, final, consumo) {
+        return consumo.fecha.getTime() >= inicial.getTime() === consumo.fecha.getTime() <= final.getTime()
+    }
+
+    this.consumosAcotados = function (inicial, final) {
+        this.ordenarConsumosPorFecha()
         return this.consumos.filter(consumo => {
-            const condicion_inicial = inicial == undefined ? true : consumo.fecha.getTime() >= inicial.getTime()
-            const conficion_final = final == undefined ? true : consumo.fecha.getTime() <= final.getTime()
-            return condicion_inicial == conficion_final
+            return this.dentroDeLaFecha(inicial, final, consumo)
         })
     }
 
@@ -67,7 +78,7 @@ const Cliente = function (nombre, linea) {
         this.paquete.seCompraEn(fechaDeCompra)
         this.cuenta -= paquete.cuesta()
 
-        this.renueva = renueva === true
+        this.renueva = renueva 
 
         return "Paquete comprado: " + paquete.resumenDelPlan()
     }

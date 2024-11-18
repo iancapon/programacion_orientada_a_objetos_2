@@ -1,5 +1,5 @@
 const Paquete = function (megabytes, minutos, dias, precio, fechaDeCompra) {
-    this.INFORMACION_DEL_PAQUETE = {
+    const INFO = {
         Datos: megabytes,
         Minutos: minutos,
         Dias: dias,
@@ -12,18 +12,22 @@ const Paquete = function (megabytes, minutos, dias, precio, fechaDeCompra) {
     this.ultimaFecha = fechaDeCompra
 
     this.renovar = function (fechaDeRenovacion) {
-        this.datos = this.INFORMACION_DEL_PAQUETE.Datos
-        this.minutos = this.INFORMACION_DEL_PAQUETE.Minutos
-        this.dias = this.INFORMACION_DEL_PAQUETE.Dias
+        this.datos = INFO.Datos
+        this.minutos = INFO.Minutos
+        this.dias = INFO.Dias
         this.ultimaFecha = fechaDeRenovacion
     }
 
     this.seCompraEn = function (fecha) { this.ultimaFecha = fecha == undefined ? this.ultimaFecha : fecha }
 
-    this.cuesta = function () { return this.INFORMACION_DEL_PAQUETE.Precio }
+    this.cuesta = function () { return INFO.Precio }
 
     this.resumenDelPlan = function () {
-        return this.datos + " GB, " + this.minutos + " minutos, " + this.dias + " dias, " + this.INFORMACION_DEL_PAQUETE.Precio + " pesos."
+        return `${INFO.Datos} MB, ${INFO.Minutos} minutos, ${INFO.Dias} dias, ${INFO.Precio} pesos.`
+    }
+
+    this.resumenDeSaldo = function () {
+        return `Le quedan: ${this.datos} MB y ${this.minutos} minutos. Vence en ${this.dias} días.`
     }
 
     this.validarDatosPasados = function (datos) {
