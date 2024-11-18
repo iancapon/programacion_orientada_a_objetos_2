@@ -101,6 +101,8 @@ describe("Pasa al lado de la estacion de recarga, recarga su bateria",()=>{
     })
 })
 
+
+
 describe("Se aleja de la estacion de recarga hasta que tiene que volver.",()=>{
     test("...", () => {
         const mapa = crearMapa(10,10, [])
@@ -108,7 +110,7 @@ describe("Se aleja de la estacion de recarga hasta que tiene que volver.",()=>{
 
         expect(()=> marsRover.movete("WWWW")).toThrow(new Error("Se aleja demasiado de la estacion de recarga"))
         
-        expect(marsRover.obtenerPosicionActual.toEqualObject(crearCoordenadas(5, 5)))
+        expect(marsRover.obtenerPosicionActual()).toEqualObject(crearCoordenadas(5, 5))
         expect(marsRover.obtenerBateria()).toBe(6)
     })
 })

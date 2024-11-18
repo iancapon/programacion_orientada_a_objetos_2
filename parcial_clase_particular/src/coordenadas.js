@@ -36,8 +36,9 @@ const Coordenadas = function(x, y){
     };
 
     this.saltosHacia = function(coordenada){
-        const valor = this.restar(coordenada)
-        return Math.abs(valor.toArray()[0]) + Math.abs(valor.toArray[1])
+        let valor = this.restar(coordenada)
+        let arreglo = valor.toArray()
+        return Math.abs(arreglo[0]) + Math.abs(arreglo[1])
     }
 
     this.dentroDe = function(puntoInferiorIsquierdo, puntoSuperiosDerecho){

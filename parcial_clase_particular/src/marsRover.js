@@ -3,16 +3,31 @@ const comandoFactory = require("./comandoFactory");
 const Coordenadas = require("./coordenadas");
 const ComandoVacio = require("./comandoVacio");
 
+
+const Bateria = function(inicial){
+    this.bateria = inicial
+    this.descargar = function(){
+        this.bateria -= 1
+    }
+    this.recargar = function(){
+        this.bateria = inicial
+    }
+    this.obtenerBateria = function(){
+        return this.bateria
+    }
+
+}
+
 const MarsRover = function (posicionInicialX, posicionInicialY, mapa, bateriaInicial) {
 
     this.posicionActual = new Coordenadas(posicionInicialX, posicionInicialY);
     this.mapa = mapa;
 
-    this.bateria = bateriaInicial;
+    this.bateria = new Bateria(bateriaInicial);
     this.estacion = new Coordenadas(posicionInicialX, posicionInicialY);
 
     this.obtenerBateria = function () {
-        return this.bateria
+        return this.bateria.obtenerBateria()
     }
     this.obtenerPosicionActual = function () {
         return this.posicionActual;
@@ -67,21 +82,23 @@ const MarsRover = function (posicionInicialX, posicionInicialY, mapa, bateriaIni
         this.validarQueNoHayaObstaculos(resultadoDelMovimiento);
 
         if (!this.posicionActual.equals(resultadoDelMovimiento)) {
-            this.bateria -= 1
+            this.bateria.descargar()// -= 1
         }
 
+        this.posicionActual = resultadoDelMovimiento
+
         if (this.bateria != undefined) {
-            if (this.estacion.saltosHacia(resultadoDelMovimiento) > this.bateria) {
+            if (this.posicionActual.saltosHacia(this.estacion) > this.bateria.obtenerBateria()) {
                 this.posicionActual = this.estacion
+                this.bateria.recargar()
                 throw new Error("Se aleja demasiado de la estacion de recarga")
             }
         }
 
-        if (resultadoDelMovimiento.equals(this.estacion)) {
-            this.bateria = bateriaInicial
-        }
 
-        this.posicionActual = resultadoDelMovimiento
+        if (this.posicionActual.equals(this.estacion)) {
+            this.bateria.recargar()
+        }
     }
 
 };
