@@ -4,19 +4,6 @@ const Coordenadas = require("./coordenadas");
 const ComandoVacio = require("./comandoVacio");
 
 
-const Bateria = function(inicial){
-    this.bateria = inicial
-    this.descargar = function(){
-        this.bateria -= 1
-    }
-    this.recargar = function(){
-        this.bateria = inicial
-    }
-    this.obtenerBateria = function(){
-        return this.bateria
-    }
-
-}
 //definimos bateria como bateriainicial
 const MarsRover = function (posicionInicialX, posicionInicialY, mapa, bateriaInicial) {
 
@@ -104,6 +91,20 @@ const MarsRover = function (posicionInicialX, posicionInicialY, mapa, bateriaIni
     }
 
 };
+
+
+const Bateria = function(inicial){
+    this.bateria = inicial
+    this.descargar = function(){
+        this.bateria -= 1
+    }
+    this.recargar = function(){
+        this.bateria = inicial
+    }
+    this.obtenerBateria = function(){
+        return this.bateria
+    }
+}
 
 
 module.exports = MarsRover;
