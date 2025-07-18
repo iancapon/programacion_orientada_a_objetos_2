@@ -1,6 +1,6 @@
 const Sistema = require("../src/Sistema")
 const Cliente = require("../src/Cliente")
-const Paquete = require("../src/Paquete")
+const {Paquete, PaqueteNulo} = require("../src/Paquete")
 
 test("001 sistema se crea con una fecha inicial",()=>{
     const fecha = new Date("2025-07-18T12:00:00")

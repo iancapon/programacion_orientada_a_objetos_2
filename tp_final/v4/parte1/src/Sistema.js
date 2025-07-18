@@ -4,14 +4,29 @@ const Sistema = function (fecha, listaDeClientes = [], listaDePaquetes = []) {
     this.fecha = new FechaCompartida(fecha)
     this.clientes = listaDeClientes.map(cliente => cliente.duplicado(this.fecha))
     this.paquetes = listaDePaquetes.map(paquete => paquete.duplicado(this.fecha))
+    this.consumos = []
 
     this.fechaActual = () => this.fecha.fechaActual()
 
-    this.clienteConsume = function(_cliente, consumo){
+    this.activarRenovacionAutomaticaParaCliente = function (_cliente) {
+        let cliente = this.encontrarCliente(_cliente)
+        cliente.activarRenovacionAutomatica()
+    }
+
+    this.consumosDe = function(_cliente){
+        let cliente = this.encontrarCliente(_cliente)
+        let consumosDelCliente = this.consumos.filter(c => c.usuario.soyElMismoCliente(cliente))
+        return consumosDelCliente.map(c => c.valor.datosImportantes())
+    }
+
+    
+
+    this.clienteConsume = function (_cliente, consumo) {
         let cliente = this.encontrarCliente(_cliente)
         this.fecha.actualizarFecha(consumo.fechaDeInicio())
         this.fecha.actualizarFecha(consumo.fechaDeFin())
         cliente.consume(consumo)
+        this.consumos.push({ "usuario": cliente, "valor": consumo })
     }
 
     this.clienteQuiereSaberCuantoLeQuedaDisponible = function (_cliente, fecha) {

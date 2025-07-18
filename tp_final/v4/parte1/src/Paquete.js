@@ -1,4 +1,4 @@
-const Paquete = function (nombre = "Paquete Vacio", precio = 0, gb = 0, minutos = 0, duracion = 0, fechaDeCompra, fechaActual) {
+const Paquete = function (nombre , precio , gb , minutos , duracion , fechaDeCompra, fechaActual) {
     this.nombre = () => nombre
     this.gb = () => gb
     this.minutos = () => minutos
@@ -6,6 +6,20 @@ const Paquete = function (nombre = "Paquete Vacio", precio = 0, gb = 0, minutos 
     this.precio = () => precio
     this.fechaDeCompra = () => fechaDeCompra
     this.fechaActual = fechaActual
+
+    this.vencido = function () {
+        return this.duracion() - (this.fechaActual.fechaActual() - this.fechaDeCompra()) / (1000 * 60 * 60 * 24) <= 0
+    }
+
+    this.agotado = function () {
+        return this.gb() <= 0 || this.minutos() <= 0
+    }
+
+    this.chequearVencidoAgotado = function () {
+        if (!this.vencido() && !this.agotado()) {
+            throw new Error("No se puede comprar un paquete hasta que este vencido o agotado")
+        }
+    }
 
     this.informacionDelPaquete = function () {
         return {
@@ -36,7 +50,7 @@ const Paquete = function (nombre = "Paquete Vacio", precio = 0, gb = 0, minutos 
         if (this.gb() < consumo.datos()) {
             throw new Error("Cliente no puede consumir datos que no tiene.")
         }
-        if (this.minutos() < consumo.minutos() ) {
+        if (this.minutos() < consumo.minutos()) {
             throw new Error("Cliente no puede consumir minutos que no tiene.")
         }
         return new this.constructor(
@@ -51,4 +65,9 @@ const Paquete = function (nombre = "Paquete Vacio", precio = 0, gb = 0, minutos 
     }
 }
 
-module.exports = Paquete
+const PaqueteNulo = function () {
+    this.chequearVencidoAgotado = function () {
+        return
+    }
+}
+module.exports = { Paquete, PaqueteNulo }
