@@ -1,6 +1,6 @@
 const Sistema = require("../src/Sistema")
 const Cliente = require("../src/Cliente")
-const { Paquete, PaqueteNulo } = require("../src/Paquete")
+const { Paquete, PaqueteNulo , PaqueteActivo} = require("../src/Paquete")
 const { ConsumoDatos, ConsumoMinutos } = require("../src/Consumo")
 
 test("001 Cliente intenta acceder a sus datos en el sistema pero no está registrado", () => {

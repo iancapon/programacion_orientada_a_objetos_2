@@ -1,6 +1,6 @@
 const Sistema = require("../src/Sistema")
 const Cliente = require("../src/Cliente")
-const { Paquete, PaqueteNulo } = require("../src/Paquete")
+const { Paquete, PaqueteNulo, PaqueteActivo } = require("../src/Paquete")
 const { ConsumoDatos, ConsumoMinutos } = require("../src/Consumo")
 
 test("001 Cliente quiere saber cuanto le queda disponible de dias, y para consumir.", () => {

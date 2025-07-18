@@ -1,4 +1,4 @@
-const Paquete = function (nombre , precio , gb , minutos , duracion , fechaDeCompra, fechaActual) {
+const PaqueteActivo = function (nombre , precio , gb , minutos , duracion , fechaDeCompra, fechaActual) {
     this.nombre = () => nombre
     this.gb = () => gb
     this.minutos = () => minutos
@@ -7,13 +7,9 @@ const Paquete = function (nombre , precio , gb , minutos , duracion , fechaDeCom
     this.fechaDeCompra = () => fechaDeCompra
     this.fechaActual = fechaActual
 
-    this.vencido = function () {
-        return this.duracion() - (this.fechaActual.fechaActual() - this.fechaDeCompra()) / (1000 * 60 * 60 * 24) <= 0
-    }
+    this.vencido = () => this.duracion() <= (this.fechaActual.fechaActual() - this.fechaDeCompra()) / (1000 * 60 * 60 * 24) 
 
-    this.agotado = function () {
-        return this.gb() <= 0 || this.minutos() <= 0
-    }
+    this.agotado = () => this.gb() <= 0 || this.minutos() <= 0
 
     this.chequearVencidoAgotado = function () {
         if (!this.vencido() && !this.agotado()) {
@@ -35,7 +31,7 @@ const Paquete = function (nombre , precio , gb , minutos , duracion , fechaDeCom
     }
 
     this.duplicado = function (fecha) {
-        return new this.constructor(
+        return new PaqueteActivo(
             this.nombre(),
             this.precio(),
             this.gb(),
@@ -53,7 +49,7 @@ const Paquete = function (nombre , precio , gb , minutos , duracion , fechaDeCom
         if (this.minutos() < consumo.minutos()) {
             throw new Error("Cliente no puede consumir minutos que no tiene.")
         }
-        return new this.constructor(
+        return new PaqueteActivo(
             this.nombre(),
             this.precio(),
             this.gb() - consumo.datos(),
@@ -61,6 +57,38 @@ const Paquete = function (nombre , precio , gb , minutos , duracion , fechaDeCom
             this.duracion(),
             this.fechaDeCompra(),
             this.fechaActual
+        )
+    }
+}
+
+const Paquete = function (nombre , precio , gb , minutos , duracion) {
+    this.nombre = () => nombre
+    this.gb = () => gb
+    this.minutos = () => minutos
+    this.duracion = () => duracion
+    this.precio = () => precio
+
+    this.informacionDelPaquete = function () {
+        return {
+            "GB disponibles: ": this.gb(),
+            "minutos disponibles: ": this.minutos(),
+            "Dias hasta que venza: ": this.duracion()
+        }
+    }
+
+    this.soyElMismoPaquete = function (paqueteAChequear) {
+        return this.nombre() == paqueteAChequear.nombre()
+    }
+
+    this.duplicado = function (fecha) {
+        return new PaqueteActivo(
+            this.nombre(),
+            this.precio(),
+            this.gb(),
+            this.minutos(),
+            this.duracion(),
+            fecha.fechaActual(),
+            fecha
         )
     }
 }
@@ -85,5 +113,9 @@ const PaqueteNulo = function () {
     this.informacionDelPaquete = function () {
         throw new Error("Para usar los datos primero debe comprar un paquete.")
     }
+
+    this.duplicado = function(){
+        throw new Error("No se puede duplicar un paquete nulo")
+    }
 }
-module.exports = { Paquete, PaqueteNulo }
+module.exports = { Paquete, PaqueteNulo, PaqueteActivo }

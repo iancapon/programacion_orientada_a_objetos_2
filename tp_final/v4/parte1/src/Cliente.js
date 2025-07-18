@@ -1,5 +1,5 @@
 const Cuenta = require("./Cuenta")
-const { Paquete, PaqueteNulo } = require("./Paquete")
+const { Paquete, PaqueteNulo, PaqueteActivo } = require("./Paquete")
 
 const Cliente = function (nombre, linea, fechaActual) {
     this.nombre = () => nombre
@@ -50,7 +50,7 @@ const Cliente = function (nombre, linea, fechaActual) {
     }
 
     this.duplicado = function (fecha) {
-        return new this.constructor(this.nombre(), this.linea(), fecha)
+        return new Cliente(this.nombre(), this.linea(), fecha)
     }
 }
 
