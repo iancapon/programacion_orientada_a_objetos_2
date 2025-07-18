@@ -8,18 +8,17 @@ const Cliente = function (nombre, linea, fechaActual) {
     this.paquete = new Paquete()
     this.fecha = fechaActual
 
-    this.quedaDisponible = function(fecha){
-        this.fecha = fecha
+    this.fechaActual = () => this.fecha.fechaActual()
+
+    this.quedaDisponible = function(){
         return this.paquete.informacionDelPaquete(this.fecha)
     }
 
-    this.cargaDineroEnCuenta = function(dinero, fecha){
-        this.fecha = fecha
+    this.cargaDineroEnCuenta = function(dinero){
         this.cuenta.cargar(dinero)
     }
 
-    this.compraPaquete = function(paquete, fecha){
-        this.fecha = fecha
+    this.compraPaquete = function(paquete){
         this.cuenta.debitar(paquete.precio())
         this.paquete = paquete.duplicado(this.fecha)
         
@@ -31,7 +30,7 @@ const Cliente = function (nombre, linea, fechaActual) {
     }
 
     this.duplicado = function (fecha) {
-        return new this.constructor(this.nombre(), this.linea(), fechaActual)
+        return new this.constructor(this.nombre(), this.linea(), fecha)
     }
 }
 
