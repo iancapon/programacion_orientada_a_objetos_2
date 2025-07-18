@@ -19,8 +19,6 @@ const Sistema = function (fecha, listaDeClientes = [], listaDePaquetes = []) {
         return consumosDelCliente.map(c => c.valor.datosImportantes())
     }
 
-    
-
     this.clienteConsume = function (_cliente, consumo) {
         let cliente = this.encontrarCliente(_cliente)
         this.fecha.actualizarFecha(consumo.fechaDeInicio())

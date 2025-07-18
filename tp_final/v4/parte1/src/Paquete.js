@@ -69,5 +69,21 @@ const PaqueteNulo = function () {
     this.chequearVencidoAgotado = function () {
         return
     }
+
+    this.consumir = function (consumo) {
+        throw new Error("Para usar los datos primero debe comprar un paquete.")
+    }
+
+    this.vencido = function () {
+        throw new Error("Para usar los datos primero debe comprar un paquete.")
+    }
+
+    this.agotado = function () {
+        throw new Error("Para usar los datos primero debe comprar un paquete.")
+    }
+
+    this.informacionDelPaquete = function () {
+        throw new Error("Para usar los datos primero debe comprar un paquete.")
+    }
 }
 module.exports = { Paquete, PaqueteNulo }
