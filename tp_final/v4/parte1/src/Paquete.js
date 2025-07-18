@@ -21,7 +21,33 @@ const Paquete = function (nombre = "Paquete Vacio", precio = 0, gb = 0, minutos 
     }
 
     this.duplicado = function (fecha) {
-        return new this.constructor(this.nombre(), this.precio(), this.gb(), this.minutos(), this.duracion(), fecha.fechaActual(), fecha)
+        return new this.constructor(
+            this.nombre(),
+            this.precio(),
+            this.gb(),
+            this.minutos(),
+            this.duracion(),
+            fecha.fechaActual(),
+            fecha
+        )
+    }
+
+    this.consumir = function (consumo) {
+        if (this.gb() < consumo.datos()) {
+            throw new Error("Cliente no puede consumir datos que no tiene.")
+        }
+        if (this.minutos() < consumo.minutos() ) {
+            throw new Error("Cliente no puede consumir minutos que no tiene.")
+        }
+        return new this.constructor(
+            this.nombre(),
+            this.precio(),
+            this.gb() - consumo.datos(),
+            this.minutos() - consumo.minutos(),
+            this.duracion(),
+            this.fechaDeCompra(),
+            this.fechaActual
+        )
     }
 }
 

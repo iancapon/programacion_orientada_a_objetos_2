@@ -1,4 +1,4 @@
-const Fecha = function (date) {
+const FechaCompartida = function (date) {
     this.date = date
 
     this.fechaActual = () => new Date(this.date.getTime())
@@ -11,4 +11,4 @@ const Fecha = function (date) {
     }
 }
 
-module.exports = Fecha 
+module.exports = FechaCompartida 

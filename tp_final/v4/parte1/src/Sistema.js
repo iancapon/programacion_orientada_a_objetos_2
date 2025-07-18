@@ -1,4 +1,4 @@
-const FechaCompartida = require("./Fecha")
+const FechaCompartida = require("./FechaCompartida")
 
 const Sistema = function (fecha, listaDeClientes = [], listaDePaquetes = []) {
     this.fecha = new FechaCompartida(fecha)
@@ -6,6 +6,13 @@ const Sistema = function (fecha, listaDeClientes = [], listaDePaquetes = []) {
     this.paquetes = listaDePaquetes.map(paquete => paquete.duplicado(this.fecha))
 
     this.fechaActual = () => this.fecha.fechaActual()
+
+    this.clienteConsume = function(_cliente, consumo){
+        let cliente = this.encontrarCliente(_cliente)
+        this.fecha.actualizarFecha(consumo.fechaDeInicio())
+        this.fecha.actualizarFecha(consumo.fechaDeFin())
+        cliente.consume(consumo)
+    }
 
     this.clienteQuiereSaberCuantoLeQuedaDisponible = function (_cliente, fecha) {
         let cliente = this.encontrarCliente(_cliente)

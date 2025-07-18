@@ -10,6 +10,10 @@ const Cliente = function (nombre, linea, fechaActual) {
 
     this.fechaActual = () => this.fecha.fechaActual()
 
+    this.consume = function(consumo){
+        this.paquete = this.paquete.consumir(consumo)
+    }
+
     this.quedaDisponible = function(){
         return this.paquete.informacionDelPaquete(this.fecha)
     }
