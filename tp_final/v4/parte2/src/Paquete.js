@@ -1,3 +1,17 @@
+const PaqueteNulo = function () {
+    this.chequearVencidoAgotado = function () {
+        return
+    }
+
+    this.consumir = function (consumo) {
+        throw new Error("Para usar los datos primero debe comprar un paquete.")
+    }
+
+    this.informacionDelPaquete = function () {
+        throw new Error("Para usar los datos primero debe comprar un paquete.")
+    }
+}
+
 const Paquete = function (nombre, precio, gb, minutos, duracion, appsIlimitadas) {
     this.nombre = () => nombre
     this.gb = () => gb
@@ -57,6 +71,9 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
         if (this.gb() < datos || this.minutos() < minutos) {
             throw new Error("No alcanzan los datos / minutos que se desean prestar")
         }
+        if (datos < 0 || minutos < 0) {
+            throw new Error("Se tiene que ingresar una cantidad positiva a los datos / minutos prestados")
+        }
 
         const resultado = {
             "datosResultantesDelQuePresta":
@@ -85,7 +102,7 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
         return resultado
     }
 
-    this.sumarPlanCambiandoVencimiento = function(otroPlan){
+    this.sumarPlanCambiandoVencimiento = function (otroPlan) {
         return new PaqueteActivo(
             this.nombre(),
             this.precio(),
@@ -153,18 +170,4 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
     }
 }
 
-
-const PaqueteNulo = function () {
-    this.chequearVencidoAgotado = function () {
-        return
-    }
-
-    this.consumir = function (consumo) {
-        throw new Error("Para usar los datos primero debe comprar un paquete.")
-    }
-
-    this.informacionDelPaquete = function () {
-        throw new Error("Para usar los datos primero debe comprar un paquete.")
-    }
-}
 module.exports = { Paquete, PaqueteNulo, PaqueteActivo }

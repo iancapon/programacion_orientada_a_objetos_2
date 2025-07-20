@@ -3,6 +3,7 @@ const Cliente = require("../src/Cliente")
 const { Paquete, PaqueteNulo, PaqueteActivo } = require("../src/Paquete")
 const { ConsumoDatos, ConsumoMinutos, ConsumoApp } = require("../src/Consumo")
 
+
 test("001 Cliente ian intenta prestar un datos y minutos a nico, pero nico aun tiene un plan vigente", () => {
     const fecha = new Date("2025-07-18T12:00:00");
     const ian = new Cliente(nombre = "ian", linea = 12345678)
@@ -58,7 +59,27 @@ test("003 Cliente ian intenta prestar datos y minutos a nico, pero no tiene sufi
     expect(() => sistema.clientePrestaDatosAOtro(ian, nico, datos = 300, minutos = 300, fecha)).toThrow(new Error("No alcanzan los datos / minutos que se desean prestar"))
 })
 
-test("004 Cliente ian le presta datos y minutos a nico cuando agota el plan", () => {
+test("004 Cliente ian intenta prestar datos / minutos negativos", () => {
+    const fecha = new Date("2025-07-18T12:00:00");
+    const ian = new Cliente(nombre = "ian", linea = 12345678)
+    const nico = new Cliente(nombre = "nico", linea = 98765432)
+    const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30, [])
+    const sistema = new Sistema(fecha, [ian, nico], [paquete])
+
+    const consumoNico = new ConsumoDatos(datos = 1000, inicio = fecha, fin = fecha)
+
+    sistema.clienteCargaDineroEnCuenta(ian, dinero = 1000, fecha)
+    sistema.clienteCompraPaquete(ian, paquete, fecha)
+    sistema.clienteCargaDineroEnCuenta(nico, dinero = 1000, fecha)
+    sistema.clienteCompraPaquete(nico, paquete, fecha)
+
+    sistema.clienteConsume(nico, consumoNico)
+
+    expect(()=>sistema.clientePrestaDatosAOtro(ian, nico, datos = -1, minutos = -1, fecha)).toThrow(new Error("Se tiene que ingresar una cantidad positiva a los datos / minutos prestados"))
+
+})
+
+test("005 Cliente ian le presta datos y minutos a nico cuando agota el plan", () => {
     const fecha = new Date("2025-07-18T12:00:00");
     const ian = new Cliente(nombre = "ian", linea = 12345678)
     const nico = new Cliente(nombre = "nico", linea = 98765432)
@@ -94,7 +115,7 @@ test("004 Cliente ian le presta datos y minutos a nico cuando agota el plan", ()
 })
 
 
-test("005 Cliente ian le presta datos y minutos a nico cuando se le vence el plan", () => {
+test("006 Cliente ian le presta datos y minutos a nico cuando se le vence el plan", () => {
     const fecha = new Date("2025-07-18T12:00:00");
     const ian = new Cliente(nombre = "ian", linea = 12345678)
     const nico = new Cliente(nombre = "nico", linea = 98765432)
