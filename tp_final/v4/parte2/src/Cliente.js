@@ -14,7 +14,7 @@ const Cliente = function (nombre, linea, fechaActual) {
 
     this.recibirDatosMinutosEmprestados = function(clienteEmisor,datos,minutos){
         this.paquete.chequearVencidoAgotado()
-        this.paquete = clienteEmisor.tomarDatosPrestados(datos, minutos)
+        this.paquete = this.paquete.sumarPlanCambiandoVencimiento(clienteEmisor.tomarDatosPrestados(datos, minutos))
     }
 
     this.tomarDatosPrestados = function(datos, minutos){

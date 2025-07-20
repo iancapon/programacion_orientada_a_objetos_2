@@ -85,6 +85,19 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
         return resultado
     }
 
+    this.sumarPlanCambiandoVencimiento = function(otroPlan){
+        return new PaqueteActivo(
+            this.nombre(),
+            this.precio(),
+            this.gb() + otroPlan.gb(),
+            this.minutos() + otroPlan.minutos(),
+            this.duracion(),
+            otroPlan.fechaDeCompra(),
+            this.fechaActual,
+            this.appsIlimitadas()
+        )
+    }
+
     this.informacionDelPaquete = function () {
         return {
             "Fecha de compra: ": this.fechaDeCompra().toUTCString(),
