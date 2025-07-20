@@ -49,8 +49,40 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
 
     this.chequearVencidoAgotado = function () {
         if (!this.vencido() && !this.agotado()) {
-            throw new Error("No se puede comprar un paquete hasta que este vencido o agotado")
+            throw new Error("No se puede renovar un paquete hasta que este vencido o agotado")
         }
+    }
+
+    this.prestarDatosMinutos = function (datos, minutos) {
+        if (this.gb() < datos || this.minutos() < minutos) {
+            throw new Error("No alcanzan los datos / minutos que se desean prestar")
+        }
+
+        const resultado = {
+            "datosResultantesDelQuePresta":
+                new PaqueteActivo(
+                    this.nombre(),
+                    this.precio(),
+                    this.gb() - datos,
+                    this.minutos() - minutos,
+                    this.duracion(),
+                    this.fechaDeCompra(),
+                    this.fechaActual,
+                    this.appsIlimitadas()
+                ),
+            "datosResultantesPrestados":
+                new PaqueteActivo(
+                    this.nombre(),
+                    this.precio(),
+                    datos,
+                    minutos,
+                    this.duracion(),
+                    this.fechaDeCompra(),
+                    this.fechaActual,
+                    this.appsIlimitadas()
+                )
+        }
+        return resultado
     }
 
     this.informacionDelPaquete = function () {
@@ -80,8 +112,8 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
         )
     }
 
-    this.chequearAppUsoIlimitado = function(consumo){
-        if(this.appsIlimitadas().includes(consumo.app())){
+    this.chequearAppUsoIlimitado = function (consumo) {
+        if (this.appsIlimitadas().includes(consumo.app())) {
             return 0
         }
         return consumo.datos()

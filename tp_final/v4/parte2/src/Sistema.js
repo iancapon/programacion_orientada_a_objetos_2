@@ -33,6 +33,14 @@ const Sistema = function (fecha, listaDeClientes = [], listaDePaquetes = []) {
         return cliente.quedaDisponible()
     }
 
+    this.clientePrestaDatosAOtro = function(_clienteEmisor, _clienteReceptor, datos, minutos, fecha){
+        const clienteEmisor = this.encontrarCliente(_clienteEmisor)
+        const clienteReceptor = this.encontrarCliente(_clienteReceptor)
+        this.fecha.actualizarFecha(fecha)
+        clienteReceptor.recibirDatosMinutosEmprestados(clienteEmisor,datos,minutos)
+
+    }
+
     this.clienteCargaDineroEnCuenta = function (_cliente, dinero, fecha) {
         const cliente = this.encontrarCliente(_cliente)
         this.fecha.actualizarFecha(fecha)

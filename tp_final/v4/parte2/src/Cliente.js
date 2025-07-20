@@ -12,6 +12,18 @@ const Cliente = function (nombre, linea, fechaActual) {
     this.activarRenovacionAutomatica = () => this.renovarAutomaticamente = true
     this.desactivarRenovacionAutomatica = () => this.renovarAutomaticamente = false
 
+    this.recibirDatosMinutosEmprestados = function(clienteEmisor,datos,minutos){
+        this.paquete.chequearVencidoAgotado()
+        this.paquete = clienteEmisor.tomarDatosPrestados(datos, minutos)
+    }
+
+    this.tomarDatosPrestados = function(datos, minutos){
+        const paquetesNuevos = this.paquete.prestarDatosMinutos(datos, minutos)
+        this.paquete = paquetesNuevos.datosResultantesDelQuePresta
+
+        return paquetesNuevos.datosResultantesPrestados
+    }
+
     this.renovarSiSeHaAgotado = function () {
         if (!this.renovarAutomaticamente) {
             return

@@ -71,7 +71,7 @@ test("007 Cliente intenta comprar otro paquete antes de que venza o agote el act
     sistema.clienteCargaDineroEnCuenta(cliente, 2000, fecha)
     sistema.clienteCompraPaquete(cliente, paquete, fecha)
 
-    expect(() => sistema.clienteCompraPaquete(cliente, paquete, fecha)).toThrow(new Error("No se puede comprar un paquete hasta que este vencido o agotado"))
+    expect(() => sistema.clienteCompraPaquete(cliente, paquete, fecha)).toThrow(new Error("No se puede renovar un paquete hasta que este vencido o agotado"))
 })
 
 test("008 Cliente ha agotado el paquete actual, puede comprar otro...", () => {
