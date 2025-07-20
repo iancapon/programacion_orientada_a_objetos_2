@@ -1,11 +1,11 @@
 const Sistema = require("../src/Sistema")
 const Cliente = require("../src/Cliente")
-const { Paquete, PaqueteNulo , PaqueteActivo} = require("../src/Paquete")
+const { Paquete, PaqueteNulo, PaqueteActivo } = require("../src/Paquete")
 const { ConsumoDatos, ConsumoMinutos } = require("../src/Consumo")
 
 test("001 Cliente intenta acceder a sus datos en el sistema pero no está registrado", () => {
     const fecha = new Date("2025-07-18T12:00:00")
-    const sistema = new Sistema(fecha)
+    const sistema = new Sistema(fecha, [], [])
     const cliente = new Cliente(nombre = "ian", linea = 12345678)
 
     expect(() => (sistema.encontrarCliente(cliente))).toThrow(new Error("El cliente no se encuentra en el sistema."))
@@ -22,7 +22,7 @@ test("002 Sistema se crea con clientes registrados", () => {
 })
 
 test("003 Sistema no tiene registrado el paquete", () => {
-    const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30)
+    const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30, [])
     const fecha = new Date("2025-07-18T12:00:00")
     const sistema = new Sistema(fecha, [], [])
 
@@ -30,7 +30,7 @@ test("003 Sistema no tiene registrado el paquete", () => {
 })
 
 test("004 Sistema se crea con paquetes registrados", () => {
-    const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30)
+    const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30, [])
     const fecha = new Date("2025-07-18T12:00:00")
     const sistema = new Sistema(fecha, [], [paquete])
 
@@ -40,7 +40,7 @@ test("004 Sistema se crea con paquetes registrados", () => {
 
 test("005 Cliente busca comprar un paquete, pero no tiene dinero suficiente", () => {
     const cliente = new Cliente(nombre = "ian", linea = 12345678)
-    const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30)
+    const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30, [])
     const fecha = new Date("2025-07-18T12:00:00")
     const sistema = new Sistema(fecha, [cliente], [paquete])
 
@@ -51,7 +51,7 @@ test("005 Cliente busca comprar un paquete, pero no tiene dinero suficiente", ()
 
 test("006 Cliente carga dinero en cuenta y compra paquete", () => {
     const cliente = new Cliente(nombre = "ian", linea = 12345678)
-    const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30)
+    const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30, [])
     const fecha = new Date("2025-07-18T12:00:00");
     const sistema = new Sistema(fecha, [cliente], [paquete])
 
@@ -65,7 +65,7 @@ test("006 Cliente carga dinero en cuenta y compra paquete", () => {
 test("007 Cliente intenta comprar otro paquete antes de que venza o agote el actual, no puede", () => {
     const fecha = new Date("2025-07-18T12:00:00");
     const cliente = new Cliente(nombre = "ian", linea = 12345678)
-    const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30)
+    const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30, [])
     const sistema = new Sistema(fecha, [cliente], [paquete])
 
     sistema.clienteCargaDineroEnCuenta(cliente, 2000, fecha)
@@ -77,7 +77,7 @@ test("007 Cliente intenta comprar otro paquete antes de que venza o agote el act
 test("008 Cliente ha agotado el paquete actual, puede comprar otro...", () => {
     const fecha = new Date("2025-07-18T12:00:00");
     const cliente = new Cliente(nombre = "ian", linea = 12345678)
-    const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30)
+    const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30, [])
     const sistema = new Sistema(fecha, [cliente], [paquete])
     const consumo = new ConsumoDatos(datos = 1000, inicio = new Date("2025-07-18T13:00:00"), fin = new Date("2025-07-18T14:00:00"))
 
@@ -89,7 +89,8 @@ test("008 Cliente ha agotado el paquete actual, puede comprar otro...", () => {
         "Dias hasta que venza: ": 28,
         "Fecha de compra: ": "Fri, 18 Jul 2025 15:00:00 GMT",
         "GB disponibles: ": 0,
-        "minutos disponibles: ": 1000
+        "minutos disponibles: ": 1000,
+        "apps ilimitadas": []
     })
 
     sistema.clienteCompraPaquete(cliente, paquete, new Date("2025-07-21T12:00:00"))
@@ -98,7 +99,8 @@ test("008 Cliente ha agotado el paquete actual, puede comprar otro...", () => {
         "Dias hasta que venza: ": 30,
         "Fecha de compra: ": "Mon, 21 Jul 2025 15:00:00 GMT",
         "GB disponibles: ": 1000,
-        "minutos disponibles: ": 1000
+        "minutos disponibles: ": 1000,
+        "apps ilimitadas": []
     })
 
 })
@@ -106,7 +108,7 @@ test("008 Cliente ha agotado el paquete actual, puede comprar otro...", () => {
 test("009 Cliente setea paquete para auto renovarse en la proxima entrada, si ha vencido, y tiene dinero en cuenta.", () => {
     const fecha1 = new Date("2025-07-18T12:00:00");
     const cliente = new Cliente(nombre = "ian", linea = 12345678)
-    const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30)
+    const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30, [])
     const sistema = new Sistema(fecha1, [cliente], [paquete])
 
     sistema.activarRenovacionAutomaticaParaCliente(cliente)
@@ -117,12 +119,33 @@ test("009 Cliente setea paquete para auto renovarse en la proxima entrada, si ha
         "Dias hasta que venza: ": 1,
         "Fecha de compra: ": "Fri, 18 Jul 2025 15:00:00 GMT",
         "GB disponibles: ": 1000,
-        "minutos disponibles: ": 1000
+        "minutos disponibles: ": 1000,
+        "apps ilimitadas": []
     })
     expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(cliente, new Date("2025-08-17T12:00:00"))).toEqual({
         "Dias hasta que venza: ": 30,
         "Fecha de compra: ": "Sun, 17 Aug 2025 15:00:00 GMT",
         "GB disponibles: ": 1000,
-        "minutos disponibles: ": 1000
+        "minutos disponibles: ": 1000,
+        "apps ilimitadas": []
+    })
+})
+
+test("010 Paquete seteado con apps de uso ilimitado", () => {
+    const fecha = new Date("2025-07-18T12:00:00");
+    const cliente = new Cliente(nombre = "ian", linea = 12345678)
+    const paquete = new Paquete("Paquete Especial", costo = 1000, datos = 1000, minutos = 1000, duracion = 30, ["whatsapp", "linkedin"])
+    const sistema = new Sistema(fecha, [cliente], [paquete])
+    //const consumo = new ConsumoApp(app = "whatsapp", datos = 80, inicio = new Date("2025-07-18T13:00:00"), fin = new Date("2025-07-18T14:00:00"))
+
+    sistema.clienteCargaDineroEnCuenta(cliente, dinero = 1000, fecha)
+    sistema.clienteCompraPaquete(cliente, paquete, fecha)
+
+    expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(cliente, new Date("2025-07-18T12:00:00"))).toEqual({
+        "Dias hasta que venza: ": 30,
+        "Fecha de compra: ": "Fri, 18 Jul 2025 15:00:00 GMT",
+        "GB disponibles: ": 1000,
+        "minutos disponibles: ": 1000,
+        "apps ilimitadas": ["whatsapp", "linkedin"]
     })
 })

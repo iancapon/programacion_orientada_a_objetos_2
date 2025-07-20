@@ -1,7 +1,7 @@
 const Sistema = require("../src/Sistema")
 const Cliente = require("../src/Cliente")
 const { Paquete, PaqueteNulo, PaqueteActivo } = require("../src/Paquete")
-const { ConsumoDatos, ConsumoMinutos } = require("../src/Consumo")
+const { ConsumoDatos, ConsumoMinutos, ConsumoApp } = require("../src/Consumo")
 
 test("001 Cliente intenta consumir sin haber comprado un paquete.", () => {
     const cliente = new Cliente(nombre = "ian", linea = 12345678)
@@ -33,7 +33,8 @@ test("003 Cliente quiere saber cuanto le queda disponible de dias, y para consum
         "Dias hasta que venza: ": 28,
         "Fecha de compra: ": "Fri, 18 Jul 2025 15:00:00 GMT",
         "GB disponibles: ": 1000,
-        "minutos disponibles: ": 1000
+        "minutos disponibles: ": 1000,
+        "apps ilimitadas": []
     })
 })
 
@@ -78,7 +79,8 @@ test("006 Consumo de internet se registra en el sistema", () => {
         "Dias hasta que venza: ": 28,
         "Fecha de compra: ": "Fri, 18 Jul 2025 15:00:00 GMT",
         "GB disponibles: ": 600,
-        "minutos disponibles: ": 1000
+        "minutos disponibles: ": 1000,
+        "apps ilimitadas": []
     })
 })
 
@@ -97,7 +99,8 @@ test("007 Consumo de minutos de llamada se registra en el sistema", () => {
         "Dias hasta que venza: ": 28,
         "Fecha de compra: ": "Fri, 18 Jul 2025 15:00:00 GMT",
         "GB disponibles: ": 1000,
-        "minutos disponibles: ": 200
+        "minutos disponibles: ": 200,
+        "apps ilimitadas": []
     })
 })
 
@@ -142,3 +145,18 @@ test("008 Sistema guarda los consumos de los clientes ordenados por fecha", () =
     ])
 })
 
+test("009 Consumo de app se registra en el sistema", () => {
+    const fecha = new Date("2025-07-18T12:00:00");
+    const cliente = new Cliente(nombre = "ian", linea = 12345678)
+    const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30)
+    const sistema = new Sistema(fecha, [cliente], [paquete])
+    const consumo = new ConsumoApp(app = "whatsapp", datos = 80, inicio = new Date("2025-07-18T13:00:00"), fin = new Date("2025-07-18T14:00:00"))
+
+    sistema.clienteCargaDineroEnCuenta(cliente, dinero = 1000, fecha)
+    sistema.clienteCompraPaquete(cliente, paquete, fecha)
+    sistema.clienteConsume(cliente, consumo)
+
+    expect(sistema.consumosDe(cliente, new Date("2025-07-25T14:00:00"))).toEqual([
+        { "app": "whatsapp", "datos": 80, "inicio": "Fri, 18 Jul 2025 16:00:00 GMT", "fin": "Fri, 18 Jul 2025 17:00:00 GMT" }
+    ])
+})

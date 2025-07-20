@@ -5,7 +5,7 @@ const { ConsumoDatos, ConsumoMinutos } = require("../src/Consumo")
 
 test("001 Cliente intenta acceder a sus datos en el sistema pero no está registrado", () => {
     const fecha = new Date("2025-07-18T12:00:00")
-    const sistema = new Sistema(fecha)
+    const sistema = new Sistema(fecha,[],[])
     const cliente = new Cliente(nombre = "ian", linea = 12345678)
 
     expect(() => (sistema.encontrarCliente(cliente))).toThrow(new Error("El cliente no se encuentra en el sistema."))

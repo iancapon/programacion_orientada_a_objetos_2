@@ -1,15 +1,17 @@
-const Paquete = function (nombre , precio , gb , minutos , duracion) {
+const Paquete = function (nombre, precio, gb, minutos, duracion, appsIlimitadas = []) {
     this.nombre = () => nombre
     this.gb = () => gb
     this.minutos = () => minutos
     this.duracion = () => duracion
     this.precio = () => precio
+    this.appsIlimitadas = () => appsIlimitadas
 
     this.informacionDelPaquete = function () {
         return {
             "GB disponibles: ": this.gb(),
             "minutos disponibles: ": this.minutos(),
-            "Dias hasta que venza: ": this.duracion()
+            "Dias hasta que venza: ": this.duracion(),
+            "apps ilimitadas": this.appsIlimitadas()
         }
     }
 
@@ -25,12 +27,13 @@ const Paquete = function (nombre , precio , gb , minutos , duracion) {
             this.minutos(),
             this.duracion(),
             fecha.fechaActual(),
-            fecha
+            fecha,
+            this.appsIlimitadas()
         )
     }
 }
 
-const PaqueteActivo = function (nombre , precio , gb , minutos , duracion , fechaDeCompra, fechaActual) {
+const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCompra, fechaActual, appsIlimitadas) {
     this.nombre = () => nombre
     this.gb = () => gb
     this.minutos = () => minutos
@@ -38,8 +41,9 @@ const PaqueteActivo = function (nombre , precio , gb , minutos , duracion , fech
     this.precio = () => precio
     this.fechaDeCompra = () => fechaDeCompra
     this.fechaActual = fechaActual
+    this.appsIlimitadas = () => appsIlimitadas
 
-    this.vencido = () => this.duracion() <= (this.fechaActual.fechaActual() - this.fechaDeCompra()) / (1000 * 60 * 60 * 24) 
+    this.vencido = () => this.duracion() <= (this.fechaActual.fechaActual() - this.fechaDeCompra()) / (1000 * 60 * 60 * 24)
 
     this.agotado = () => this.gb() <= 0 || this.minutos() <= 0
 
@@ -54,7 +58,8 @@ const PaqueteActivo = function (nombre , precio , gb , minutos , duracion , fech
             "Fecha de compra: ": this.fechaDeCompra().toUTCString(),
             "GB disponibles: ": this.gb(),
             "minutos disponibles: ": this.minutos(),
-            "Dias hasta que venza: ": this.duracion() - (this.fechaActual.fechaActual() - this.fechaDeCompra()) / (1000 * 60 * 60 * 24)
+            "Dias hasta que venza: ": this.duracion() - (this.fechaActual.fechaActual() - this.fechaDeCompra()) / (1000 * 60 * 60 * 24),
+            "apps ilimitadas": this.appsIlimitadas()
         }
     }
 
@@ -70,7 +75,8 @@ const PaqueteActivo = function (nombre , precio , gb , minutos , duracion , fech
             this.minutos(),
             this.duracion(),
             fecha.fechaActual(),
-            fecha
+            fecha,
+            this.appsIlimitadas()
         )
     }
 
@@ -88,7 +94,8 @@ const PaqueteActivo = function (nombre , precio , gb , minutos , duracion , fech
             this.minutos() - consumo.minutos(),
             this.duracion(),
             this.fechaDeCompra(),
-            this.fechaActual
+            this.fechaActual,
+            this.appsIlimitadas()
         )
     }
 }
