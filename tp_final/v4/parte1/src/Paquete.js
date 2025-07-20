@@ -1,3 +1,35 @@
+const Paquete = function (nombre , precio , gb , minutos , duracion) {
+    this.nombre = () => nombre
+    this.gb = () => gb
+    this.minutos = () => minutos
+    this.duracion = () => duracion
+    this.precio = () => precio
+
+    this.informacionDelPaquete = function () {
+        return {
+            "GB disponibles: ": this.gb(),
+            "minutos disponibles: ": this.minutos(),
+            "Dias hasta que venza: ": this.duracion()
+        }
+    }
+
+    this.soyElMismoPaquete = function (paqueteAChequear) {
+        return this.nombre() == paqueteAChequear.nombre()
+    }
+
+    this.duplicado = function (fecha) {
+        return new PaqueteActivo(
+            this.nombre(),
+            this.precio(),
+            this.gb(),
+            this.minutos(),
+            this.duracion(),
+            fecha.fechaActual(),
+            fecha
+        )
+    }
+}
+
 const PaqueteActivo = function (nombre , precio , gb , minutos , duracion , fechaDeCompra, fechaActual) {
     this.nombre = () => nombre
     this.gb = () => gb
@@ -61,37 +93,6 @@ const PaqueteActivo = function (nombre , precio , gb , minutos , duracion , fech
     }
 }
 
-const Paquete = function (nombre , precio , gb , minutos , duracion) {
-    this.nombre = () => nombre
-    this.gb = () => gb
-    this.minutos = () => minutos
-    this.duracion = () => duracion
-    this.precio = () => precio
-
-    this.informacionDelPaquete = function () {
-        return {
-            "GB disponibles: ": this.gb(),
-            "minutos disponibles: ": this.minutos(),
-            "Dias hasta que venza: ": this.duracion()
-        }
-    }
-
-    this.soyElMismoPaquete = function (paqueteAChequear) {
-        return this.nombre() == paqueteAChequear.nombre()
-    }
-
-    this.duplicado = function (fecha) {
-        return new PaqueteActivo(
-            this.nombre(),
-            this.precio(),
-            this.gb(),
-            this.minutos(),
-            this.duracion(),
-            fecha.fechaActual(),
-            fecha
-        )
-    }
-}
 
 const PaqueteNulo = function () {
     this.chequearVencidoAgotado = function () {
@@ -102,20 +103,8 @@ const PaqueteNulo = function () {
         throw new Error("Para usar los datos primero debe comprar un paquete.")
     }
 
-    this.vencido = function () {
-        throw new Error("Para usar los datos primero debe comprar un paquete.")
-    }
-
-    this.agotado = function () {
-        throw new Error("Para usar los datos primero debe comprar un paquete.")
-    }
-
     this.informacionDelPaquete = function () {
         throw new Error("Para usar los datos primero debe comprar un paquete.")
-    }
-
-    this.duplicado = function(){
-        throw new Error("No se puede duplicar un paquete nulo")
     }
 }
 module.exports = { Paquete, PaqueteNulo, PaqueteActivo }

@@ -1,9 +1,26 @@
 const Sistema = require("../src/Sistema")
 const Cliente = require("../src/Cliente")
 const { Paquete, PaqueteNulo, PaqueteActivo } = require("../src/Paquete")
-const { ConsumoDatos, ConsumoMinutos, ConsumoApp } = require("../src/Consumo")
+const { ConsumoDatos, ConsumoMinutos } = require("../src/Consumo")
 
-test("001 Cliente quiere saber cuanto le queda disponible de dias, y para consumir.", () => {
+test("001 Cliente intenta consumir sin haber comprado un paquete.", () => {
+    const cliente = new Cliente(nombre = "ian", linea = 12345678)
+    const fecha = new Date("2025-07-18T12:00:00");
+    const sistema = new Sistema(fecha, [cliente], [])
+    const consumo = new ConsumoDatos(datos = 100, inicio = new Date("2025-07-18T13:00:00"), fin = new Date("2025-07-18T14:00:00"))
+
+    expect(() => sistema.clienteConsume(cliente, consumo)).toThrow(new Error("Para usar los datos primero debe comprar un paquete."))
+})
+
+test("002 Cliente intenta ver la informacion del paquete, sin haber comprado un paquete.", () => {
+    const cliente = new Cliente(nombre = "ian", linea = 12345678)
+    const fecha = new Date("2025-07-18T12:00:00");
+    const sistema = new Sistema(fecha, [cliente], [])
+
+    expect(() => sistema.clienteQuiereSaberCuantoLeQuedaDisponible(cliente)).toThrow(new Error("Para usar los datos primero debe comprar un paquete."))
+})
+
+test("003 Cliente quiere saber cuanto le queda disponible de dias, y para consumir.", () => {
     const cliente = new Cliente(nombre = "ian", linea = 12345678)
     const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30)
     const fecha = new Date("2025-07-18T12:00:00");
@@ -20,7 +37,7 @@ test("001 Cliente quiere saber cuanto le queda disponible de dias, y para consum
     })
 })
 
-test("002 Consumo de internet no se efectua por no tener suficiente saldo de datos", () => {
+test("004 Consumo de internet no se efectua por no tener suficiente saldo de datos", () => {
     const fecha = new Date("2025-07-18T12:00:00");
     const cliente = new Cliente(nombre = "ian", linea = 12345678)
     const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30)
@@ -33,7 +50,7 @@ test("002 Consumo de internet no se efectua por no tener suficiente saldo de dat
     expect(() => sistema.clienteConsume(cliente, consumo)).toThrow("Cliente no puede consumir datos que no tiene.")
 })
 
-test("003 Consumo de minutos de llamada no se efectua por no tener suficiente saldo de minutos", () => {
+test("005 Consumo de minutos de llamada no se efectua por no tener suficiente saldo de minutos", () => {
     const fecha = new Date("2025-07-18T12:00:00");
     const cliente = new Cliente(nombre = "ian", linea = 12345678)
     const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30)
@@ -46,7 +63,7 @@ test("003 Consumo de minutos de llamada no se efectua por no tener suficiente sa
     expect(() => sistema.clienteConsume(cliente, consumo)).toThrow("Cliente no puede consumir minutos que no tiene.")
 })
 
-test("004 Consumo de internet", () => {
+test("006 Consumo de internet se registra en el sistema", () => {
     const fecha = new Date("2025-07-18T12:00:00");
     const cliente = new Cliente(nombre = "ian", linea = 12345678)
     const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30)
@@ -65,7 +82,7 @@ test("004 Consumo de internet", () => {
     })
 })
 
-test("005 Consumo de minutos de llamada", () => {
+test("007 Consumo de minutos de llamada se registra en el sistema", () => {
     const fecha = new Date("2025-07-18T12:00:00");
     const cliente = new Cliente(nombre = "ian", linea = 12345678)
     const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30)
@@ -84,7 +101,7 @@ test("005 Consumo de minutos de llamada", () => {
     })
 })
 
-test("006 Sistema guarda los consumos de los clientes ordenados por fecha", () => {
+test("008 Sistema guarda los consumos de los clientes ordenados por fecha", () => {
     const fecha = new Date("2025-07-18T12:00:00");
     const ian = new Cliente(nombre = "ian", linea = 12345678)
     const nico = new Cliente(nombre = "nico", linea = 98765432)
@@ -125,59 +142,3 @@ test("006 Sistema guarda los consumos de los clientes ordenados por fecha", () =
     ])
 })
 
-test("007 Consumo de internet por aplicaciones en especifico", () => {
-    const fecha = new Date("2025-07-18T12:00:00");
-    const ian = new Cliente(nombre = "ian", linea = 12345678)
-    const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30,[])
-    const sistema = new Sistema(fecha, [ian], [paquete])
-
-    const whatsapp = new ConsumoApp("WhatsApp", datos = 100, inicio = new Date("2025-07-18T13:00:00"), fin = new Date("2025-07-18T14:00:00"))
-    const linkedin = new ConsumoApp("LinkedIn", datos = 100, inicio = new Date("2025-07-18T15:00:00"), fin = new Date("2025-07-18T16:00:00"))
-
-    sistema.clienteCargaDineroEnCuenta(ian, 2000, fecha)
-    sistema.clienteCompraPaquete(ian, paquete, fecha)
-
-    sistema.clienteConsume(ian, whatsapp)
-    sistema.clienteConsume(ian, linkedin)
-
-    expect(sistema.consumosDe(ian, new Date("2025-07-25T14:00:00"))).toEqual([
-        { "app": "WhatsApp", "datos": 100, "inicio": "Fri, 18 Jul 2025 16:00:00 GMT", "fin": "Fri, 18 Jul 2025 17:00:00 GMT" },
-        { "app": "LinkedIn", "datos": 100, "inicio": "Fri, 18 Jul 2025 18:00:00 GMT", "fin": "Fri, 18 Jul 2025 19:00:00 GMT" },
-    ])
-    expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(ian, new Date("2025-07-30T12:00:00"))).toEqual({
-        "Dias hasta que venza: ": 18,
-        "Fecha de compra: ": "Fri, 18 Jul 2025 15:00:00 GMT",
-        "GB disponibles: ": 800,
-        "minutos disponibles: ": 1000
-    })
-
-})
-/*
-test("008 Consumo de la app WhatsApp es ilimitado", () => {
-    const fecha = new Date("2025-07-18T12:00:00");
-    const ian = new Cliente(nombre = "ian", linea = 12345678)
-    const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30, ["Whatsapp"])
-    const sistema = new Sistema(fecha, [ian], [paquete])
-
-    const whatsapp = new ConsumoApp("WhatsApp", datos = 100, inicio = new Date("2025-07-18T13:00:00"), fin = new Date("2025-07-18T14:00:00"))
-    const linkedin = new ConsumoApp("LinkedIn", datos = 100, inicio = new Date("2025-07-18T15:00:00"), fin = new Date("2025-07-18T16:00:00"))
-
-    sistema.clienteCargaDineroEnCuenta(ian, 2000, fecha)
-    sistema.clienteCompraPaquete(ian, paquete, fecha)
-
-    sistema.clienteConsume(ian, whatsapp)
-    sistema.clienteConsume(ian, linkedin)
-
-    expect(sistema.consumosDe(ian, new Date("2025-07-25T14:00:00"))).toEqual([
-        { "app": "WhatsApp", "datos": 100, "inicio": "Fri, 18 Jul 2025 16:00:00 GMT", "fin": "Fri, 18 Jul 2025 17:00:00 GMT" },
-        { "app": "LinkedIn", "datos": 100, "inicio": "Fri, 18 Jul 2025 18:00:00 GMT", "fin": "Fri, 18 Jul 2025 19:00:00 GMT" },
-    ])
-    expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(ian, new Date("2025-07-30T12:00:00"))).toEqual({
-        "Dias hasta que venza: ": 18,
-        "Fecha de compra: ": "Fri, 18 Jul 2025 15:00:00 GMT",
-        "GB disponibles: ": 900,
-        "minutos disponibles: ": 1000
-    })
-
-})
-    */

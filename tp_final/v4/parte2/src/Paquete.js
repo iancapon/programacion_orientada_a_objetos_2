@@ -1,14 +1,45 @@
-const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCompra, fechaActual, appsIlimitadas =[]) {
+const Paquete = function (nombre , precio , gb , minutos , duracion) {
     this.nombre = () => nombre
     this.gb = () => gb
     this.minutos = () => minutos
     this.duracion = () => duracion
     this.precio = () => precio
-    this.appsIlimitadas = () => appsIlimitadas
+
+    this.informacionDelPaquete = function () {
+        return {
+            "GB disponibles: ": this.gb(),
+            "minutos disponibles: ": this.minutos(),
+            "Dias hasta que venza: ": this.duracion()
+        }
+    }
+
+    this.soyElMismoPaquete = function (paqueteAChequear) {
+        return this.nombre() == paqueteAChequear.nombre()
+    }
+
+    this.duplicado = function (fecha) {
+        return new PaqueteActivo(
+            this.nombre(),
+            this.precio(),
+            this.gb(),
+            this.minutos(),
+            this.duracion(),
+            fecha.fechaActual(),
+            fecha
+        )
+    }
+}
+
+const PaqueteActivo = function (nombre , precio , gb , minutos , duracion , fechaDeCompra, fechaActual) {
+    this.nombre = () => nombre
+    this.gb = () => gb
+    this.minutos = () => minutos
+    this.duracion = () => duracion
+    this.precio = () => precio
     this.fechaDeCompra = () => fechaDeCompra
     this.fechaActual = fechaActual
 
-    this.vencido = () => this.duracion() <= (this.fechaActual.fechaActual() - this.fechaDeCompra()) / (1000 * 60 * 60 * 24)
+    this.vencido = () => this.duracion() <= (this.fechaActual.fechaActual() - this.fechaDeCompra()) / (1000 * 60 * 60 * 24) 
 
     this.agotado = () => this.gb() <= 0 || this.minutos() <= 0
 
@@ -39,8 +70,7 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
             this.minutos(),
             this.duracion(),
             fecha.fechaActual(),
-            fecha,
-            this.appsIlimitadas()
+            fecha
         )
     }
 
@@ -54,49 +84,15 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
         return new PaqueteActivo(
             this.nombre(),
             this.precio(),
-            this.gb() - consumo.datos(this.appsIlimitadas()),
+            this.gb() - consumo.datos(),
             this.minutos() - consumo.minutos(),
             this.duracion(),
             this.fechaDeCompra(),
-            this.fechaActual,
-            this.appsIlimitadas()
+            this.fechaActual
         )
     }
 }
 
-const Paquete = function (nombre, precio, gb, minutos, duracion, appsIlimitadas) {
-    this.nombre = () => nombre
-    this.gb = () => gb
-    this.minutos = () => minutos
-    this.duracion = () => duracion
-    this.precio = () => precio
-    this.appsIlimitadas = () => appsIlimitadas
-
-    this.informacionDelPaquete = function () {
-        return {
-            "GB disponibles: ": this.gb(),
-            "minutos disponibles: ": this.minutos(),
-            "Dias hasta que venza: ": this.duracion()
-        }
-    }
-
-    this.soyElMismoPaquete = function (paqueteAChequear) {
-        return this.nombre() == paqueteAChequear.nombre()
-    }
-
-    this.duplicado = function (fecha) {
-        return new PaqueteActivo(
-            this.nombre(),
-            this.precio(),
-            this.gb(),
-            this.minutos(),
-            this.duracion(),
-            fecha.fechaActual(),
-            fecha,
-            this.appsIlimitadas()
-        )
-    }
-}
 
 const PaqueteNulo = function () {
     this.chequearVencidoAgotado = function () {
@@ -107,20 +103,8 @@ const PaqueteNulo = function () {
         throw new Error("Para usar los datos primero debe comprar un paquete.")
     }
 
-    this.vencido = function () {
-        throw new Error("Para usar los datos primero debe comprar un paquete.")
-    }
-
-    this.agotado = function () {
-        throw new Error("Para usar los datos primero debe comprar un paquete.")
-    }
-
     this.informacionDelPaquete = function () {
         throw new Error("Para usar los datos primero debe comprar un paquete.")
-    }
-
-    this.duplicado = function () {
-        throw new Error("No se puede duplicar un paquete nulo")
     }
 }
 module.exports = { Paquete, PaqueteNulo, PaqueteActivo }

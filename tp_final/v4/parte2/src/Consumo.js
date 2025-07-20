@@ -11,23 +11,6 @@ const ConsumoDatos = function (datos, inicio, fin) {
     }
 }
 
-const ConsumoApp = function (app, datos, inicio, fin) {
-    this.fechaDeInicio = () => inicio
-    this.fechaDeFin = () => fin
-    this.datos = function (apps) {
-        if (apps.includes(app)) return 0
-        return datos
-    }
-    this.minutos = () => 0
-    this.app = () => app
-
-    if (datos < 0) throw new Error("Datos no pueden ser negativos")
-
-    this.datosImportantes = function () {
-        return { "app": this.app(), "datos": this.datos(), "inicio": this.fechaDeInicio().toUTCString(), "fin": this.fechaDeFin().toUTCString() }
-    }
-}
-
 const ConsumoMinutos = function (minutos, inicio, fin) {
     this.fechaDeInicio = () => inicio
     this.fechaDeFin = () => fin
@@ -41,4 +24,4 @@ const ConsumoMinutos = function (minutos, inicio, fin) {
     }
 }
 
-module.exports = { ConsumoDatos, ConsumoMinutos, ConsumoApp }
+module.exports = { ConsumoDatos, ConsumoMinutos }
