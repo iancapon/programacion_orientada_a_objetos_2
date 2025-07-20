@@ -136,7 +136,6 @@ test("010 Paquete seteado con apps de uso ilimitado", () => {
     const cliente = new Cliente(nombre = "ian", linea = 12345678)
     const paquete = new Paquete("Paquete Especial", costo = 1000, datos = 1000, minutos = 1000, duracion = 30, ["whatsapp", "linkedin"])
     const sistema = new Sistema(fecha, [cliente], [paquete])
-    //const consumo = new ConsumoApp(app = "whatsapp", datos = 80, inicio = new Date("2025-07-18T13:00:00"), fin = new Date("2025-07-18T14:00:00"))
 
     sistema.clienteCargaDineroEnCuenta(cliente, dinero = 1000, fecha)
     sistema.clienteCompraPaquete(cliente, paquete, fecha)

@@ -1,4 +1,4 @@
-const Paquete = function (nombre, precio, gb, minutos, duracion, appsIlimitadas = []) {
+const Paquete = function (nombre, precio, gb, minutos, duracion, appsIlimitadas) {
     this.nombre = () => nombre
     this.gb = () => gb
     this.minutos = () => minutos
@@ -80,6 +80,13 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
         )
     }
 
+    this.chequearAppUsoIlimitado = function(consumo){
+        if(this.appsIlimitadas().includes(consumo.app())){
+            return 0
+        }
+        return consumo.datos()
+    }
+
     this.consumir = function (consumo) {
         if (this.gb() < consumo.datos()) {
             throw new Error("Cliente no puede consumir datos que no tiene.")
@@ -87,10 +94,11 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
         if (this.minutos() < consumo.minutos()) {
             throw new Error("Cliente no puede consumir minutos que no tiene.")
         }
+        this.chequearAppUsoIlimitado(consumo)
         return new PaqueteActivo(
             this.nombre(),
             this.precio(),
-            this.gb() - consumo.datos(),
+            this.gb() - this.chequearAppUsoIlimitado(consumo),//consumo.datos(),
             this.minutos() - consumo.minutos(),
             this.duracion(),
             this.fechaDeCompra(),
