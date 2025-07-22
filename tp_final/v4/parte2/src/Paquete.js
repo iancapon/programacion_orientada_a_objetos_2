@@ -19,7 +19,7 @@ const Paquete = function (nombre, precio, gb, minutos, duracion, appsIlimitadas)
         return this.nombre() == paqueteAChequear.nombre()
     }
 
-    this.paqueteInactivo = function(){
+    this.paqueteInactivo = function () {
         return new Paquete(
             this.nombre(),
             this.precio(),
@@ -49,9 +49,9 @@ const Paquete = function (nombre, precio, gb, minutos, duracion, appsIlimitadas)
 const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCompra, fechaActual, appsIlimitadas) {
     Paquete.call(this, nombre, precio, gb, minutos, duracion, appsIlimitadas)
     this.fechaDeCompra = () => fechaDeCompra
-    this.fechaActual = fechaActual
+    this.fecha = () => fechaActual
     this.diasHastaQueVenza = () => {
-        return this.duracion() - (this.fechaActual.fechaActual() - this.fechaDeCompra()) / (1000 * 60 * 60 * 24)
+        return this.duracion() - (this.fecha().fechaActual() - this.fechaDeCompra()) / (1000 * 60 * 60 * 24)
     }
 
     this.informacionDelPaquete = function () {
@@ -91,14 +91,14 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
                     this.gb() - datos,
                     this.minutos() - minutos,
                     this.fechaDeCompra(),
-                    this.fechaActual
+                    this.fecha()
                 ),
             "datosResultantesPrestados":
                 this.crearPaqueteActivo(
                     datos,
                     minutos,
                     this.fechaDeCompra(),
-                    this.fechaActual
+                    this.fecha()
                 )
         }
         return resultado
@@ -110,7 +110,7 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
             this.gb() + otroPlan.gb(),
             this.minutos() + otroPlan.minutos(),
             otroPlan.fechaDeCompra(),
-            this.fechaActual,
+            this.fecha(),
         )
     }
 
@@ -125,7 +125,7 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
             this.gb() - consumo.datos(this.appsIlimitadas()),
             this.minutos() - consumo.minutos(),
             this.fechaDeCompra(),
-            this.fechaActual,
+            this.fecha(),
         )
     }
 }

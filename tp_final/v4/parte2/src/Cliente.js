@@ -6,12 +6,12 @@ const Cliente = function (nombre, linea, fechaActual) {
     this.linea = () => linea
     this.cuenta = new Cuenta()
     this.paquete = new PaqueteNulo()
-    this.fecha = fechaActual
+    this.fecha = () => fechaActual
     this.renovarAutomaticamente = false
 
-    this.actualizarFecha = (nuevaFecha) => this.fecha.actualizarFecha(nuevaFecha)
+    this.actualizarFecha = (nuevaFecha) => this.fecha().actualizarFecha(nuevaFecha)
 
-    this.fechaActual = () => this.fecha.fechaActual()
+    this.fechaActual = () => this.fecha().fechaActual()
 
     this.activarRenovacionAutomatica = () => this.renovarAutomaticamente = true
     this.desactivarRenovacionAutomatica = () => this.renovarAutomaticamente = false
@@ -29,11 +29,11 @@ const Cliente = function (nombre, linea, fechaActual) {
         return paquetesNuevos.datosResultantesPrestados
     }
 
-    
+
     this.renovarSiSeHaAgotado = function () {
         if (this.renovarAutomaticamente && this.paquete.vencidoAgotado()) {
             this.cuenta.debitar(this.paquete.precio())
-            this.paquete = this.paquete.duplicado(this.fecha)
+            this.paquete = this.paquete.duplicado(this.fecha())
         }
     }
 
@@ -44,7 +44,7 @@ const Cliente = function (nombre, linea, fechaActual) {
 
     this.quedaDisponible = function () {
         this.renovarSiSeHaAgotado()
-        return this.paquete.informacionDelPaquete(this.fecha)
+        return this.paquete.informacionDelPaquete(this.fecha())
     }
 
     this.cargaDineroEnCuenta = function (dinero) {
@@ -54,7 +54,7 @@ const Cliente = function (nombre, linea, fechaActual) {
     this.compraPaquete = function (paquete) {
         this.paquete.chequearVencidoAgotado()
         this.cuenta.debitar(paquete.precio())
-        this.paquete = paquete.duplicado(this.fecha)
+        this.paquete = paquete.duplicado(this.fecha())
 
         return this.paquete
     }
