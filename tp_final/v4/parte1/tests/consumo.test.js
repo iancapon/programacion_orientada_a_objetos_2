@@ -1,6 +1,6 @@
 const Sistema = require("../src/Sistema")
 const Cliente = require("../src/Cliente")
-const { Paquete, PaqueteNulo, PaqueteActivo } = require("../src/Paquete")
+const { Paquete } = require("../src/Paquete")
 const { ConsumoDatos, ConsumoMinutos } = require("../src/Consumo")
 
 test("001 Cliente intenta consumir sin haber comprado un paquete.", () => {

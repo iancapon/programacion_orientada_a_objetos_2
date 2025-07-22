@@ -6,7 +6,7 @@ const Consumo = function (inicio, fin) {
     this.app = () => false
 
     this.datosImportantes = function () {
-        return { "Consumo": "No hubo consumo", "inicio": this.fechaDeInicio().toUTCString(), "fin": this.fechaDeFin().toUTCString() }
+        return { "Consumo": "No hubo consumo", "inicio": this.fechaDeInicio(), "fin": this.fechaDeFin() }
     }
 }
 
@@ -16,7 +16,7 @@ const ConsumoApp = function (app, datos, inicio, fin) {
     this.app = () => app
 
     this.datosImportantes = function () {
-        return { "app": this.app(), "datos": this.datos(), "inicio": this.fechaDeInicio().toUTCString(), "fin": this.fechaDeFin().toUTCString() }
+        return { "app": this.app(), "datos": this.datos(), "inicio": this.fechaDeInicio(), "fin": this.fechaDeFin() }
     }
 }
 
@@ -28,7 +28,7 @@ const ConsumoDatos = function (datos, inicio, fin) {
     this.datos = () => datos
 
     this.datosImportantes = function () {
-        return { "datos": this.datos(), "inicio": this.fechaDeInicio().toUTCString(), "fin": this.fechaDeFin().toUTCString() }
+        return { "datos": this.datos(), "inicio": this.fechaDeInicio(), "fin": this.fechaDeFin() }
     }
 }
 
@@ -40,7 +40,7 @@ const ConsumoMinutos = function (minutos, inicio, fin) {
     this.minutos = () => minutos
 
     this.datosImportantes = function () {
-        return { "minutos": this.minutos(), "inicio": this.fechaDeInicio().toUTCString(), "fin": this.fechaDeFin().toUTCString() }
+        return { "minutos": this.minutos(), "inicio": this.fechaDeInicio(), "fin": this.fechaDeFin() }
     }
 }
 

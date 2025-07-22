@@ -54,7 +54,7 @@ describe("Cliente adquiere paquetes", () => {
 
         expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(cliente, new Date("2025-07-20T12:00:00"))).toEqual({
             "Dias hasta que venza: ": 28,
-            "Fecha de compra: ": "Fri, 18 Jul 2025 15:00:00 GMT",
+            "Fecha de compra: ": new Date("2025-07-18T12:00:00"),
             "GB disponibles: ": 0,
             "minutos disponibles: ": 1000,
             "apps ilimitadas": []
@@ -64,7 +64,7 @@ describe("Cliente adquiere paquetes", () => {
 
         expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(cliente, new Date("2025-07-21T12:00:00"))).toEqual({
             "Dias hasta que venza: ": 30,
-            "Fecha de compra: ": "Mon, 21 Jul 2025 15:00:00 GMT",
+            "Fecha de compra: ": new Date("2025-07-21T12:00:00"),
             "GB disponibles: ": 1000,
             "minutos disponibles: ": 1000,
             "apps ilimitadas": []
@@ -84,14 +84,14 @@ describe("Cliente adquiere paquetes", () => {
 
         expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(cliente, new Date("2025-08-16T12:00:00"))).toEqual({
             "Dias hasta que venza: ": 1,
-            "Fecha de compra: ": "Fri, 18 Jul 2025 15:00:00 GMT",
+            "Fecha de compra: ": new Date("2025-07-18T12:00:00"),
             "GB disponibles: ": 1000,
             "minutos disponibles: ": 1000,
             "apps ilimitadas": []
         })
         expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(cliente, new Date("2025-08-17T12:00:00"))).toEqual({
             "Dias hasta que venza: ": 30,
-            "Fecha de compra: ": "Sun, 17 Aug 2025 15:00:00 GMT",
+            "Fecha de compra: ": new Date("2025-08-17T12:00:00"),
             "GB disponibles: ": 1000,
             "minutos disponibles: ": 1000,
             "apps ilimitadas": []
@@ -109,7 +109,7 @@ describe("Cliente adquiere paquetes", () => {
 
         expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(cliente, new Date("2025-07-18T12:00:00"))).toEqual({
             "Dias hasta que venza: ": 30,
-            "Fecha de compra: ": "Fri, 18 Jul 2025 15:00:00 GMT",
+            "Fecha de compra: ": new Date("2025-07-18T12:00:00"),
             "GB disponibles: ": 1000,
             "minutos disponibles: ": 1000,
             "apps ilimitadas": ["whatsapp", "linkedin"]
@@ -213,7 +213,7 @@ describe("Clientes se prestan datos", () => {
 
         expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(ian, fecha)).toEqual({
             "Dias hasta que venza: ": 30,
-            "Fecha de compra: ": "Fri, 18 Jul 2025 15:00:00 GMT",
+            "Fecha de compra: ": new Date("2025-07-18T12:00:00"),
             "GB disponibles: ": 700,
             "minutos disponibles: ": 700,
             "apps ilimitadas": []
@@ -221,7 +221,7 @@ describe("Clientes se prestan datos", () => {
 
         expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(nico, fecha)).toEqual({
             "Dias hasta que venza: ": 30,
-            "Fecha de compra: ": "Fri, 18 Jul 2025 15:00:00 GMT",
+            "Fecha de compra: ": new Date("2025-07-18T12:00:00"),
             "GB disponibles: ": 300,
             "minutos disponibles: ": 1300,
             "apps ilimitadas": []
@@ -244,7 +244,7 @@ describe("Clientes se prestan datos", () => {
 
         expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(ian, new Date("2025-08-18T12:00:00"))).toEqual({
             "Dias hasta que venza: ": 9,
-            "Fecha de compra: ": "Mon, 28 Jul 2025 15:00:00 GMT",
+            "Fecha de compra: ": new Date("2025-07-28T12:00:00"),
             "GB disponibles: ": 1000,
             "minutos disponibles: ": 1000,
             "apps ilimitadas": []
@@ -252,7 +252,7 @@ describe("Clientes se prestan datos", () => {
 
         expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(nico, new Date("2025-08-18T12:00:00"))).toEqual({
             "Dias hasta que venza: ": -1,
-            "Fecha de compra: ": "Fri, 18 Jul 2025 15:00:00 GMT",
+            "Fecha de compra: ": new Date("2025-07-18T12:00:00"),
             "GB disponibles: ": 1000,
             "minutos disponibles: ": 1000,
             "apps ilimitadas": []
@@ -262,7 +262,7 @@ describe("Clientes se prestan datos", () => {
 
         expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(ian, new Date("2025-08-18T12:00:00"))).toEqual({
             "Dias hasta que venza: ": 9,
-            "Fecha de compra: ": "Mon, 28 Jul 2025 15:00:00 GMT",
+            "Fecha de compra: ": new Date("2025-07-28T12:00:00"),
             "GB disponibles: ": 700,
             "minutos disponibles: ": 700,
             "apps ilimitadas": []
@@ -270,7 +270,7 @@ describe("Clientes se prestan datos", () => {
 
         expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(nico, new Date("2025-08-18T12:00:00"))).toEqual({
             "Dias hasta que venza: ": 9,
-            "Fecha de compra: ": "Mon, 28 Jul 2025 15:00:00 GMT",
+            "Fecha de compra: ": new Date("2025-07-28T12:00:00"),
             "GB disponibles: ": 1300,
             "minutos disponibles: ": 1300,
             "apps ilimitadas": []

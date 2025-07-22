@@ -19,6 +19,17 @@ const Paquete = function (nombre, precio, gb, minutos, duracion, appsIlimitadas)
         return this.nombre() == paqueteAChequear.nombre()
     }
 
+    this.paqueteInactivo = function(){
+        return new Paquete(
+            this.nombre(),
+            this.precio(),
+            this.gb(),
+            this.minutos(),
+            this.duracion(),
+            this.appsIlimitadas()
+        )
+    }
+
     this.crearPaqueteActivo = function (datos, minutos, fechaDeCompra, fechaActual) {
         return new PaqueteActivo(
             this.nombre(),
@@ -45,7 +56,7 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
 
     this.informacionDelPaquete = function () {
         return {
-            "Fecha de compra: ": this.fechaDeCompra().toUTCString(),
+            "Fecha de compra: ": this.fechaDeCompra(),
             "GB disponibles: ": this.gb(),
             "minutos disponibles: ": this.minutos(),
             "Dias hasta que venza: ": this.diasHastaQueVenza(),

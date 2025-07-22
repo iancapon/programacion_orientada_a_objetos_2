@@ -34,7 +34,7 @@ describe("Cliente usa su paquete, ingresando consumos y chequeando cuantos datos
 
         expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(cliente, new Date("2025-07-20T12:00:00"))).toEqual({
             "Dias hasta que venza: ": 28,
-            "Fecha de compra: ": "Fri, 18 Jul 2025 15:00:00 GMT",
+            "Fecha de compra: ": new Date("2025-07-18T12:00:00"),
             "GB disponibles: ": 1000,
             "minutos disponibles: ": 1000,
             "apps ilimitadas": []
@@ -80,7 +80,7 @@ describe("Cliente usa su paquete, ingresando consumos y chequeando cuantos datos
 
         expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(cliente, new Date("2025-07-20T12:00:00"))).toEqual({
             "Dias hasta que venza: ": 28,
-            "Fecha de compra: ": "Fri, 18 Jul 2025 15:00:00 GMT",
+            "Fecha de compra: ": new Date("2025-07-18T12:00:00"),
             "GB disponibles: ": 600,
             "minutos disponibles: ": 1000,
             "apps ilimitadas": []
@@ -100,7 +100,7 @@ describe("Cliente usa su paquete, ingresando consumos y chequeando cuantos datos
 
         expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(cliente, new Date("2025-07-20T12:00:00"))).toEqual({
             "Dias hasta que venza: ": 28,
-            "Fecha de compra: ": "Fri, 18 Jul 2025 15:00:00 GMT",
+            "Fecha de compra: ": new Date("2025-07-18T12:00:00"),
             "GB disponibles: ": 1000,
             "minutos disponibles: ": 200,
             "apps ilimitadas": []
@@ -136,15 +136,15 @@ describe("Cliente usa su paquete, ingresando consumos y chequeando cuantos datos
         sistema.clienteConsume(nico, consumos[5])
 
         expect(sistema.consumosDe(ian, new Date("2025-07-25T14:00:00"))).toEqual([
-            { "minutos": 80, "inicio": "Fri, 18 Jul 2025 16:00:00 GMT", "fin": "Fri, 18 Jul 2025 17:00:00 GMT" },
-            { "datos": 50, "inicio": "Sun, 20 Jul 2025 16:00:00 GMT", "fin": "Sun, 20 Jul 2025 17:00:00 GMT" },
-            { "minutos": 90, "inicio": "Tue, 22 Jul 2025 16:00:00 GMT", "fin": "Tue, 22 Jul 2025 17:00:00 GMT" },
+            { "minutos": 80, "inicio": new Date("2025-07-18T13:00:00"), "fin": new Date("2025-07-18T14:00:00") },
+            { "datos": 50, "inicio": new Date("2025-07-20T13:00:00"), "fin": new Date("2025-07-20T14:00:00") },
+            { "minutos": 90, "inicio": new Date("2025-07-22T13:00:00"), "fin": new Date("2025-07-22T14:00:00") },
         ])
 
         expect(sistema.consumosDe(nico, new Date("2025-07-25T14:00:00"))).toEqual([
-            { "minutos": 30, "inicio": "Sat, 19 Jul 2025 16:00:00 GMT", "fin": "Sat, 19 Jul 2025 17:00:00 GMT" },
-            { "datos": 40, "inicio": "Mon, 21 Jul 2025 16:00:00 GMT", "fin": "Mon, 21 Jul 2025 17:00:00 GMT" },
-            { "minutos": 100, "inicio": "Wed, 23 Jul 2025 16:00:00 GMT", "fin": "Wed, 23 Jul 2025 17:00:00 GMT" },
+            { "minutos": 30, "inicio": new Date("2025-07-19T13:00:00"), "fin": new Date("2025-07-19T14:00:00") },
+            { "datos": 40, "inicio": new Date("2025-07-21T13:00:00"), "fin": new Date("2025-07-21T14:00:00") },
+            { "minutos": 100, "inicio": new Date("2025-07-23T13:00:00"), "fin": new Date("2025-07-23T14:00:00") },
         ])
     })
 
@@ -160,12 +160,12 @@ describe("Cliente usa su paquete, ingresando consumos y chequeando cuantos datos
         sistema.clienteConsume(cliente, consumo)
 
         expect(sistema.consumosDe(cliente, new Date("2025-07-25T14:00:00"))).toEqual([
-            { "app": "whatsapp", "datos": 80, "inicio": "Fri, 18 Jul 2025 16:00:00 GMT", "fin": "Fri, 18 Jul 2025 17:00:00 GMT" }
+            { "app": "whatsapp", "datos": 80, "inicio": new Date("2025-07-18T13:00:00"), "fin": new Date("2025-07-18T14:00:00") }
         ])
 
         expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(cliente, new Date("2025-07-20T12:00:00"))).toEqual({
             "Dias hasta que venza: ": 28,
-            "Fecha de compra: ": "Fri, 18 Jul 2025 15:00:00 GMT",
+            "Fecha de compra: ": new Date("2025-07-18T12:00:00"),
             "GB disponibles: ": 920,
             "minutos disponibles: ": 1000,
             "apps ilimitadas": []
@@ -184,12 +184,12 @@ describe("Cliente usa su paquete, ingresando consumos y chequeando cuantos datos
         sistema.clienteConsume(cliente, consumo)
 
         expect(sistema.consumosDe(cliente, new Date("2025-07-25T14:00:00"))).toEqual([
-            { "app": "whatsapp", "datos": 80, "inicio": "Fri, 18 Jul 2025 16:00:00 GMT", "fin": "Fri, 18 Jul 2025 17:00:00 GMT" }
+            { "app": "whatsapp", "datos": 80, "inicio": new Date("2025-07-18T13:00:00"), "fin": new Date("2025-07-18T14:00:00") }
         ])
 
         expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(cliente, new Date("2025-07-20T12:00:00"))).toEqual({
             "Dias hasta que venza: ": 28,
-            "Fecha de compra: ": "Fri, 18 Jul 2025 15:00:00 GMT",
+            "Fecha de compra: ": new Date("2025-07-18T12:00:00"),
             "GB disponibles: ": 1000,
             "minutos disponibles: ": 1000,
             "apps ilimitadas": ["whatsapp", "linkedin"]
