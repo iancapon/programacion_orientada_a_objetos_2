@@ -4,7 +4,7 @@ const { PaqueteNulo } = require("./Paquete")
 const Cliente = function (nombre, linea, fechaActual) {
     this.nombre = () => nombre
     this.linea = () => linea
-    this.cuenta = new Cuenta()
+    const cuenta = new Cuenta()
     this.paquete = new PaqueteNulo()
     this.fecha = () => fechaActual
     this.renovarAutomaticamente = false
@@ -32,8 +32,8 @@ const Cliente = function (nombre, linea, fechaActual) {
 
     this.renovarSiSeHaAgotado = function () {
         if (this.renovarAutomaticamente && this.paquete.vencidoAgotado()) {
-            this.cuenta.debitar(this.paquete.precio())
-            this.paquete = this.paquete.duplicado(this.fecha())
+            cuenta.debitar(this.paquete.precio())
+            this.paquete = this.paquete.duplicadoActivo(this.fecha())
         }
     }
 
@@ -48,13 +48,13 @@ const Cliente = function (nombre, linea, fechaActual) {
     }
 
     this.cargaDineroEnCuenta = function (dinero) {
-        this.cuenta.cargar(dinero)
+        cuenta.cargar(dinero)
     }
 
     this.compraPaquete = function (paquete) {
         this.paquete.chequearVencidoAgotado()
-        this.cuenta.debitar(paquete.precio())
-        this.paquete = paquete.duplicado(this.fecha())
+        cuenta.debitar(paquete.precio())
+        this.paquete = paquete.duplicadoActivo(this.fecha())
 
         return this.paquete
     }

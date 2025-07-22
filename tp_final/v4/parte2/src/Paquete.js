@@ -43,7 +43,7 @@ const Paquete = function (nombre, precio, gb, minutos, duracion, appsIlimitadas)
         )
     }
 
-    this.duplicado = (fecha) => this.crearPaqueteActivo(this.gb(), this.minutos(), fecha.fechaActual(), fecha)
+    this.duplicadoActivo = (fecha) => this.crearPaqueteActivo(this.gb(), this.minutos(), fecha.fechaActual(), fecha)
 }
 
 const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCompra, fechaActual, appsIlimitadas) {
