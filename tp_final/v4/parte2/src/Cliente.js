@@ -1,5 +1,5 @@
 const Cuenta = require("./Cuenta")
-const { Paquete, PaqueteNulo, PaqueteActivo } = require("./Paquete")
+const { PaqueteNulo } = require("./Paquete")
 
 const Cliente = function (nombre, linea, fechaActual) {
     this.nombre = () => nombre
@@ -12,28 +12,26 @@ const Cliente = function (nombre, linea, fechaActual) {
     this.activarRenovacionAutomatica = () => this.renovarAutomaticamente = true
     this.desactivarRenovacionAutomatica = () => this.renovarAutomaticamente = false
 
-    this.recibirDatosMinutosEmprestados = function(clienteEmisor,datos,minutos){
+    this.recibirDatosMinutosEmprestados = function (clienteEmisor, datos, minutos) {
         this.paquete.chequearVencidoAgotado()
-        this.paquete = this.paquete.sumarPlanCambiandoVencimiento(clienteEmisor.tomarDatosPrestados(datos, minutos))
+        const datosPrestados = clienteEmisor.tomarDatosPrestados(datos, minutos)
+        this.paquete = this.paquete.sumarPlanCambiandoVencimiento(datosPrestados)
     }
 
-    this.tomarDatosPrestados = function(datos, minutos){
+    this.tomarDatosPrestados = function (datos, minutos) {
         const paquetesNuevos = this.paquete.prestarDatosMinutos(datos, minutos)
         this.paquete = paquetesNuevos.datosResultantesDelQuePresta
 
         return paquetesNuevos.datosResultantesPrestados
     }
 
+    
     this.renovarSiSeHaAgotado = function () {
-        if (!this.renovarAutomaticamente) {
-            return
-        } if (this.paquete.vencido() || this.paquete.agotado()) {
+        if (this.renovarAutomaticamente && this.paquete.vencidoAgotado()) {
             this.cuenta.debitar(this.paquete.precio())
             this.paquete = this.paquete.duplicado(this.fecha)
         }
     }
-
-    this.fechaActual = () => this.fecha.fechaActual()
 
     this.consume = function (consumo) {
         this.renovarSiSeHaAgotado()
@@ -64,6 +62,8 @@ const Cliente = function (nombre, linea, fechaActual) {
     this.duplicado = function (fecha) {
         return new Cliente(this.nombre(), this.linea(), fecha)
     }
+
+    this.fechaActual = () => this.fecha.fechaActual()
 }
 
 module.exports = Cliente
