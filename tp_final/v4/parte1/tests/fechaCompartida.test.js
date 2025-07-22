@@ -45,7 +45,7 @@ test("004 La fecha que tiene el cliente y el paquete que ha adquirido es la mism
     expect(sistema.encontrarCliente(ian).fechaActual()).toEqual(new Date("2025-07-22T12:00:00"))
     expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(ian, fecha)).toEqual({
         "Dias hasta que venza: ": 30,
-        "Fecha de compra: ": "Tue, 22 Jul 2025 15:00:00 GMT",
+        "Fecha de compra: ": new Date("2025-07-22T12:00:00"),
         "GB disponibles: ": 1000,
         "minutos disponibles: ": 1000
     })

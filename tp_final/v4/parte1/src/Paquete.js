@@ -17,6 +17,16 @@ const Paquete = function (nombre , precio , gb , minutos , duracion) {
         return this.nombre() == paqueteAChequear.nombre()
     }
 
+    this.paqueteInactivo = function(){
+        return new Paquete(
+            this.nombre(),
+            this.precio(),
+            this.gb(),
+            this.minutos(),
+            this.duracion(),
+        )
+    }
+
     this.duplicado = function (fecha) {
         return new PaqueteActivo(
             this.nombre(),
@@ -51,7 +61,7 @@ const PaqueteActivo = function (nombre , precio , gb , minutos , duracion , fech
 
     this.informacionDelPaquete = function () {
         return {
-            "Fecha de compra: ": this.fechaDeCompra().toUTCString(),
+            "Fecha de compra: ": this.fechaDeCompra(),
             "GB disponibles: ": this.gb(),
             "minutos disponibles: ": this.minutos(),
             "Dias hasta que venza: ": this.duracion() - (this.fechaActual.fechaActual() - this.fechaDeCompra()) / (1000 * 60 * 60 * 24)
@@ -99,7 +109,7 @@ const PaqueteNulo = function () {
         return
     }
 
-    this.consumir = function (consumo) {
+    this.consumir = function () {
         throw new Error("Para usar los datos primero debe comprar un paquete.")
     }
 
