@@ -2,6 +2,9 @@ const Cuenta = function () {
     this.saldo = 0
 
     this.cargar = function(monto){
+        if(monto < 0){
+            throw new Error("No se puede ingresar un monto negativo")
+        }
         this.saldo += monto
     }
 

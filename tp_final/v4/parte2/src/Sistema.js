@@ -1,6 +1,6 @@
 const FechaCompartida = require("./FechaCompartida")
 
-const Sistema = function (fecha, listaDeClientes = [], listaDePaquetes = []) {
+const Sistema = function (fecha, listaDeClientes , listaDePaquetes ) {
     this.fecha = new FechaCompartida(fecha)
     this.clientes = listaDeClientes.map(cliente => cliente.duplicado(this.fecha))
     this.paquetes = listaDePaquetes.map(paquete => paquete.duplicado(this.fecha))

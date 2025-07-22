@@ -105,11 +105,8 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
 
 
 
-    this.chequearAppUsoIlimitado = function (consumo) {
-        if (this.appsIlimitadas().includes(consumo.app())) {
-            return 0
-        }
-        return consumo.datos()
+    this.datosAppNoIlimitada = function (consumo) {
+        return this.appsIlimitadas().includes(consumo.app()) ? 0 : consumo.datos()
     }
 
     this.consumir = function (consumo) {
@@ -120,7 +117,7 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
             throw new Error("Cliente no puede consumir minutos que no tiene.")
         }
         return this.crearPaqueteActivo(
-            this.gb() - this.chequearAppUsoIlimitado(consumo),
+            this.gb() - this.datosAppNoIlimitada(consumo),
             this.minutos() - consumo.minutos(),
             this.fechaDeCompra(),
             this.fechaActual,
