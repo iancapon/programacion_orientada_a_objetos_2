@@ -9,6 +9,10 @@ const Cliente = function (nombre, linea, fechaActual) {
     this.fecha = fechaActual
     this.renovarAutomaticamente = false
 
+    this.fechaActual = () => this.fecha.fechaActual()
+
+    this.actualizarFecha = (nuevaFecha) => this.fecha.actualizarFecha(nuevaFecha)
+
     this.activarRenovacionAutomatica = () => this.renovarAutomaticamente = true
     this.desactivarRenovacionAutomatica = () => this.renovarAutomaticamente = false
 
@@ -21,7 +25,6 @@ const Cliente = function (nombre, linea, fechaActual) {
         }
     }
 
-    this.fechaActual = () => this.fecha.fechaActual()
 
     this.consume = function (consumo) {
         this.renovarSiSeHaAgotado()

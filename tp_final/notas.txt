@@ -1,6 +1,3 @@
-tests(
-    * funcionamiento del sistema
-    * pedidos del cliente al sistema
-    * consumo
-    * 
-)
++cliente tiene su propia fecha,
++paquete comparte la fecha con el cliente
++cliente.actualizarFecha()
