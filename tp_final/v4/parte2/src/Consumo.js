@@ -1,8 +1,18 @@
-const ConsumoApp = function (app, datos, inicio, fin) {
+const Consumo = function (inicio, fin) {
     this.fechaDeInicio = () => inicio
     this.fechaDeFin = () => fin
-    this.datos = () => datos
+    this.datos = () => 0
     this.minutos = () => 0
+    this.app = () => false
+
+    this.datosImportantes = function () {
+        return { "Consumo": "No hubo consumo", "inicio": this.fechaDeInicio().toUTCString(), "fin": this.fechaDeFin().toUTCString() }
+    }
+}
+
+const ConsumoApp = function (app, datos, inicio, fin) {
+    Consumo.call(this, inicio, fin);
+    this.datos = () => datos
     this.app = () => app
 
     this.datosImportantes = function () {
@@ -10,28 +20,31 @@ const ConsumoApp = function (app, datos, inicio, fin) {
     }
 }
 
+ConsumoApp.prototype = Object.create(Consumo.prototype);
+ConsumoApp.prototype.constructor = ConsumoApp;
+
 const ConsumoDatos = function (datos, inicio, fin) {
-    this.fechaDeInicio = () => inicio
-    this.fechaDeFin = () => fin
+    Consumo.call(this, inicio, fin);
     this.datos = () => datos
-    this.minutos = () => 0
-    this.app = () => false
 
     this.datosImportantes = function () {
         return { "datos": this.datos(), "inicio": this.fechaDeInicio().toUTCString(), "fin": this.fechaDeFin().toUTCString() }
     }
 }
 
+ConsumoDatos.prototype = Object.create(Consumo.prototype);
+ConsumoDatos.prototype.constructor = ConsumoDatos;
+
 const ConsumoMinutos = function (minutos, inicio, fin) {
-    this.fechaDeInicio = () => inicio
-    this.fechaDeFin = () => fin
-    this.datos = () => 0
+    Consumo.call(this, inicio, fin);
     this.minutos = () => minutos
-    this.app = () => false
 
     this.datosImportantes = function () {
         return { "minutos": this.minutos(), "inicio": this.fechaDeInicio().toUTCString(), "fin": this.fechaDeFin().toUTCString() }
     }
 }
+
+ConsumoMinutos.prototype = Object.create(Consumo.prototype);
+ConsumoMinutos.prototype.constructor = ConsumoMinutos;
 
 module.exports = { ConsumoDatos, ConsumoMinutos, ConsumoApp }

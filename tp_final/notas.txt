@@ -1,0 +1,6 @@
+tests(
+    * funcionamiento del sistema
+    * pedidos del cliente al sistema
+    * consumo
+    * 
+)
