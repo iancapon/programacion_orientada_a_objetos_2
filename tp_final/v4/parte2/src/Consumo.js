@@ -3,7 +3,6 @@ const Consumo = function (inicio, fin) {
     this.fechaDeFin = () => fin
     this.datos = () => 0
     this.minutos = () => 0
-    this.app = () => false
 
     this.datosImportantes = function () {
         return { "Consumo": "No hubo consumo", "inicio": this.fechaDeInicio(), "fin": this.fechaDeFin() }
@@ -12,7 +11,7 @@ const Consumo = function (inicio, fin) {
 
 const ConsumoApp = function (app, datos, inicio, fin) {
     Consumo.call(this, inicio, fin);
-    this.datos = () => datos
+    this.datos = (listaDeAppsIlimitadas = []) => listaDeAppsIlimitadas.includes(app) ? 0 : datos
     this.app = () => app
 
     this.datosImportantes = function () {
