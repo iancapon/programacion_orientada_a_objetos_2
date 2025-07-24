@@ -1,6 +1,6 @@
 const FechaCompartida = require("./FechaCompartida")
 
-const Sistema = function (fecha, listaDeClientes , listaDePaquetes ) {
+const Sistema = function (fecha, listaDeClientes, listaDePaquetes) {
     this.clientes = listaDeClientes.map(cliente => cliente.duplicado(new FechaCompartida(fecha)))
     this.paquetes = listaDePaquetes.map(paquete => paquete.duplicadoInactivo())
     this.consumos = []
@@ -10,7 +10,7 @@ const Sistema = function (fecha, listaDeClientes , listaDePaquetes ) {
         cliente.activarRenovacionAutomatica()
     }
 
-    this.consumosDe = function(_cliente){
+    this.consumosDe = function (_cliente) {
         const cliente = this.encontrarCliente(_cliente)
         const consumosDelCliente = this.consumos.filter(c => c.usuario.soyElMismoCliente(cliente))
         return consumosDelCliente.map(c => c.valor.datosImportantes())
@@ -18,39 +18,30 @@ const Sistema = function (fecha, listaDeClientes , listaDePaquetes ) {
 
     this.clienteConsume = function (_cliente, consumo) {
         const cliente = this.encontrarCliente(_cliente)
-        cliente.actualizarFecha(consumo.fechaDeInicio())
-        cliente.actualizarFecha(consumo.fechaDeFin())
         cliente.consume(consumo)
         this.consumos.push({ "usuario": cliente, "valor": consumo })
     }
 
     this.clienteQuiereSaberCuantoLeQuedaDisponible = function (_cliente, fecha) {
         const cliente = this.encontrarCliente(_cliente)
-        cliente.actualizarFecha(fecha)
-        return cliente.quedaDisponible()
+        return cliente.quedaDisponible(fecha)
     }
 
-    this.clientePrestaDatosAOtro = function(_clienteEmisor, _clienteReceptor, datos, minutos, fecha){
+    this.clientePrestaDatosAOtro = function (_clienteEmisor, _clienteReceptor, datos, minutos, fecha) {
         const clienteEmisor = this.encontrarCliente(_clienteEmisor)
         const clienteReceptor = this.encontrarCliente(_clienteReceptor)
-        clienteEmisor.actualizarFecha(fecha)
-        clienteReceptor.actualizarFecha(fecha)
-        clienteReceptor.recibirDatosMinutosEmprestados(clienteEmisor,datos,minutos)
-
+        clienteReceptor.recibirDatosMinutosEmprestados(clienteEmisor, datos, minutos, fecha)
     }
 
     this.clienteCargaDineroEnCuenta = function (_cliente, dinero, fecha) {
         const cliente = this.encontrarCliente(_cliente)
-        cliente.actualizarFecha(fecha)
-        cliente.cargaDineroEnCuenta(dinero)
+        cliente.cargaDineroEnCuenta(dinero, fecha)
     }
 
     this.clienteCompraPaquete = function (_cliente, _paquete, fecha) {
         const cliente = this.encontrarCliente(_cliente)
         const paquete = this.encontrarPaquete(_paquete)
-        cliente.actualizarFecha(fecha)
-
-        return cliente.compraPaquete(paquete)
+        return cliente.compraPaquete(paquete, fecha)
     }
 
     this.encontrarCliente = function (cliente) {

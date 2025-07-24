@@ -6,7 +6,7 @@ const Cliente = function (nombre, linea, fechaActual) {
     this.linea = () => linea
     this.cuenta = new Cuenta()
     this.paqueteActivo = new PaqueteNulo()
-    this.paqueteInactivo = new PaqueteNulo()
+    this.paqueteReferencia = new PaqueteNulo()
     this.fecha = fechaActual
     this.renovarAutomaticamente = false
 
@@ -21,31 +21,36 @@ const Cliente = function (nombre, linea, fechaActual) {
         if (!this.renovarAutomaticamente) {
             return
         } if (this.paqueteActivo.vencido() || this.paqueteActivo.agotado()) {
-            this.cuenta.debitar(this.paqueteInactivo.precio())
-            this.paqueteActivo = this.paqueteInactivo.duplicadoActivo(this.fecha)
+            this.cuenta.debitar(this.paqueteReferencia.precio())
+            this.paqueteActivo = this.paqueteReferencia.duplicadoActivo(this.fecha)
         }
     }
 
 
     this.consume = function (consumo) {
+        this.actualizarFecha(consumo.fechaDeInicio())
+        this.actualizarFecha(consumo.fechaDeFin())
         this.renovarSiSeHaAgotado()
         this.paqueteActivo = this.paqueteActivo.consumir(consumo)
     }
 
-    this.quedaDisponible = function () {
+    this.quedaDisponible = function (fecha) {
+        this.actualizarFecha(fecha)
         this.renovarSiSeHaAgotado()
         return this.paqueteActivo.informacionDelPaquete(this.fecha)
     }
 
-    this.cargaDineroEnCuenta = function (dinero) {
+    this.cargaDineroEnCuenta = function (dinero, fecha) {
+        this.actualizarFecha(fecha)
         this.cuenta.cargar(dinero)
     }
 
-    this.compraPaquete = function (paquete) {
+    this.compraPaquete = function (paquete, fecha) {
+        this.actualizarFecha(fecha)
         this.paqueteActivo.chequearVencidoAgotado()
         this.cuenta.debitar(paquete.precio())
         this.paqueteActivo = paquete.duplicadoActivo(this.fecha)
-        this.paqueteInactivo = paquete.duplicadoInactivo()
+        this.paqueteReferencia = paquete.duplicadoInactivo()
 
         return this.paqueteActivo
     }

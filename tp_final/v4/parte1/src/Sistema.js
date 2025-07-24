@@ -19,30 +19,24 @@ const Sistema = function (fecha, listaDeClientes, listaDePaquetes) {
 
     this.clienteConsume = function (_cliente, consumo) {
         const cliente = this.encontrarCliente(_cliente)
-        cliente.actualizarFecha(consumo.fechaDeInicio())
-        cliente.actualizarFecha(consumo.fechaDeFin())
         cliente.consume(consumo)
         this.consumos.push({ "usuario": cliente, "valor": consumo })
     }
 
     this.clienteQuiereSaberCuantoLeQuedaDisponible = function (_cliente, fecha) {
         const cliente = this.encontrarCliente(_cliente)
-        cliente.actualizarFecha(fecha)
-        return cliente.quedaDisponible()
+        return cliente.quedaDisponible(fecha)
     }
 
     this.clienteCargaDineroEnCuenta = function (_cliente, dinero, fecha) {
         const cliente = this.encontrarCliente(_cliente)
-        cliente.actualizarFecha(fecha)
-        cliente.cargaDineroEnCuenta(dinero)
+        cliente.cargaDineroEnCuenta(dinero, fecha)
     }
 
     this.clienteCompraPaquete = function (_cliente, _paquete, fecha) {
         const cliente = this.encontrarCliente(_cliente)
         const paquete = this.encontrarPaquete(_paquete)
-        cliente.actualizarFecha(fecha)
-
-        return cliente.compraPaquete(paquete)
+        return cliente.compraPaquete(paquete, fecha)
     }
 
     this.encontrarCliente = function (cliente) {
