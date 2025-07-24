@@ -109,7 +109,7 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
         }
     }
 
-    this.sumarDatosMinutosCambiarVencimiento = function (otroPlan) {
+    this.recibirDatosMinutosCambiarVencimiento = function (otroPlan) {
         return this._crearPaqueteActivo(
             this.gb() + otroPlan.gb(),
             this.minutos() + otroPlan.minutos(),
@@ -144,6 +144,14 @@ PaqueteActivo.prototype.constructor = PaqueteActivo;
 const PaqueteNulo = function () {
     this.chequearVencidoAgotado = function () {
         return
+    }
+
+    this.recibirDatosMinutosCambiarVencimiento = function(){
+        throw new Error("No se puede recibir datos prestados sin haber comprado un plan")
+    }
+
+    this.prestarDatosMinutos = function(){
+        throw new Error("Se debe comprar un paquete para poder prestar datos/minutos")
     }
 
     this.vencidoAgotado = function () {

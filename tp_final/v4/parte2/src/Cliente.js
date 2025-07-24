@@ -31,7 +31,7 @@ const Cliente = function (nombre, linea, fechaActual) {
     this.recibir = function (datos_minutos, fecha) {
         this.actualizarFecha(fecha)
         this.paqueteActivo.chequearVencidoAgotado()
-        this.paqueteActivo = this.paqueteActivo.sumarDatosMinutosCambiarVencimiento(datos_minutos)
+        this.paqueteActivo = this.paqueteActivo.recibirDatosMinutosCambiarVencimiento(datos_minutos)
     }
 
     this.renovarSiSeHaAgotado = function () {
