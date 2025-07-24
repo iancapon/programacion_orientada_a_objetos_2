@@ -7,7 +7,7 @@ const Paquete = function (nombre, precio, gb, minutos, duracion, appsIlimitadas)
     this.precio = () => precio
     this.appsIlimitadas = () => appsIlimitadas
 
-    this.mismaId = (id)=> id == this.id()
+    this.mismaId = (id) => id == this.id()
 
     this.informacionDelPaquete = function () {
         return {
@@ -80,23 +80,26 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
         }
     }
 
-    this.prestarDatosMinutos = function (datos, minutos) {
+    this.chequearSiSePuedePrestar = function (datos, minutos) {
         if (this.gb() < datos || this.minutos() < minutos) {
             throw new Error("No alcanzan los datos / minutos que se desean prestar")
         }
         if (datos < 0 || minutos < 0) {
             throw new Error("Se tiene que ingresar una cantidad positiva a los datos / minutos prestados")
         }
+    }
 
-        const resultado = {
-            "datosResultantesDelQuePresta":
+    this.prestarDatosMinutos = function (datos, minutos) {
+        this.chequearSiSePuedePrestar(datos, minutos)
+        return {
+            "sobrantes":
                 this.crearPaqueteActivo(
                     this.gb() - datos,
                     this.minutos() - minutos,
                     this.fechaDeCompra(),
                     this.fecha()
                 ),
-            "datosResultantesPrestados":
+            "prestados":
                 this.crearPaqueteActivo(
                     datos,
                     minutos,
@@ -104,11 +107,10 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
                     this.fecha()
                 )
         }
-        return resultado
     }
 
 
-    this.sumarPlanCambiandoVencimiento = function (otroPlan) {
+    this.sumarDatosMinutosCambiarVencimiento = function (otroPlan) {
         return this.crearPaqueteActivo(
             this.gb() + otroPlan.gb(),
             this.minutos() + otroPlan.minutos(),

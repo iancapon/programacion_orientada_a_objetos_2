@@ -30,7 +30,8 @@ const Sistema = function (fecha, listaDeClientes, listaDePaquetes) {
     this.clientePrestaDatosAOtro = function (_clienteEmisor, _clienteReceptor, datos, minutos, fecha) {
         const clienteEmisor = this.encontrarCliente(_clienteEmisor)
         const clienteReceptor = this.encontrarCliente(_clienteReceptor)
-        clienteReceptor.recibirDatosMinutosEmprestados(clienteEmisor, datos, minutos, fecha)
+        clienteEmisor.prestar(clienteReceptor, datos, minutos, fecha)
+        //clienteReceptor.recibirDatosMinutosEmprestados(clienteEmisor, datos, minutos, fecha)
     }
 
     this.clienteCargaDineroEnCuenta = function (_cliente, dinero, fecha) {
