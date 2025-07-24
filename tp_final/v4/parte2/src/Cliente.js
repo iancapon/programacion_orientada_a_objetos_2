@@ -5,10 +5,14 @@ const Cliente = function (nombre, linea, fechaActual) {
     const cuenta = new Cuenta()
     this.paqueteActivo = new PaqueteNulo()
     this.paqueteReferencia = new PaqueteNulo()
+    this.renovarAutomaticamente = false
     this.nombre = () => nombre
     this.linea = () => linea
     this.fecha = () => fechaActual
-    this.renovarAutomaticamente = false
+
+    this.soyElMismoCliente = (clienteAChequear) => {
+        return this.nombre() == clienteAChequear.nombre() && this.linea() == clienteAChequear.linea()
+    }
 
     this.actualizarFecha = (nuevaFecha) => this.fecha().actualizarFecha(nuevaFecha)
 
@@ -63,10 +67,6 @@ const Cliente = function (nombre, linea, fechaActual) {
         this.paqueteReferencia = paquete.duplicadoInactivo()
 
         return this.paqueteActivo
-    }
-
-    this.soyElMismoCliente = function (clienteAChequear) {
-        return this.nombre() == clienteAChequear.nombre() && this.linea() == clienteAChequear.linea()
     }
 
     this.duplicado = function (fecha) {

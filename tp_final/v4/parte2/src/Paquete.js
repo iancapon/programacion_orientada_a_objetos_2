@@ -9,17 +9,6 @@ const Paquete = function (nombre, precio, gb, minutos, duracion, appsIlimitadas)
 
     this.soyElMismoPaquete = (otro) => otro.id() == this.id()
 
-    this.informacionDelPaquete = function () {
-        return {
-            "Nombre": this.nombre(),
-            "Precio" : this.precio(),
-            "GB disponibles: ": this.gb(),
-            "minutos disponibles: ": this.minutos(),
-            "Dias hasta que venza: ": this.duracion(),
-            "apps ilimitadas": this.appsIlimitadas().map(app => app.nombre())
-        }
-    }
-
     this.duplicadoInactivo = function () {
         return new Paquete(
             this.nombre(),
@@ -31,26 +20,27 @@ const Paquete = function (nombre, precio, gb, minutos, duracion, appsIlimitadas)
         )
     }
 
-    this.crearPaqueteActivo = function (datos, minutos, fechaDeCompra, fechaActual) {
+    this.duplicadoActivo = function (fecha) {
         return new PaqueteActivo(
             this.nombre(),
             this.precio(),
-            datos,
-            minutos,
+            this.gb(),
+            this.minutos(),
             this.duracion(),
-            fechaDeCompra,
-            fechaActual,
+            fecha.fechaActual(),
+            fecha,
             this.appsIlimitadas()
         )
     }
-
-    this.duplicadoActivo = (fecha) => this.crearPaqueteActivo(this.gb(), this.minutos(), fecha.fechaActual(), fecha)
 }
 
 const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCompra, fechaActual, appsIlimitadas) {
+
     Paquete.call(this, nombre, precio, gb, minutos, duracion, appsIlimitadas)
+
     this.fechaDeCompra = () => fechaDeCompra
     this.fecha = () => fechaActual
+
     this.diasHastaQueVenza = () => {
         return this.duracion() - (this.fecha().fechaActual() - this.fechaDeCompra()) / (1000 * 60 * 60 * 24)
     }
@@ -65,6 +55,18 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
         }
     }
 
+    this._crearPaqueteActivo = function (datos, minutos, fechaDeCompra, fechaActual) {
+        return new PaqueteActivo(
+            this.nombre(),
+            this.precio(),
+            datos,
+            minutos,
+            this.duracion(),
+            fechaDeCompra,
+            fechaActual,
+            this.appsIlimitadas()
+        )
+    }
 
     this.vencido = () => this.diasHastaQueVenza() <= 0
 
@@ -91,14 +93,14 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
         this.chequearSiSePuedePrestar(datos, minutos)
         return {
             "sobrantes":
-                this.crearPaqueteActivo(
+                this._crearPaqueteActivo(
                     this.gb() - datos,
                     this.minutos() - minutos,
                     this.fechaDeCompra(),
                     this.fecha()
                 ),
             "prestados":
-                this.crearPaqueteActivo(
+                this._crearPaqueteActivo(
                     datos,
                     minutos,
                     this.fechaDeCompra(),
@@ -107,9 +109,8 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
         }
     }
 
-
     this.sumarDatosMinutosCambiarVencimiento = function (otroPlan) {
-        return this.crearPaqueteActivo(
+        return this._crearPaqueteActivo(
             this.gb() + otroPlan.gb(),
             this.minutos() + otroPlan.minutos(),
             otroPlan.fechaDeCompra(),
@@ -128,7 +129,7 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
 
     this.consumir = function (consumo) {
         this.chequearSiSePuedeConsumir(consumo.datos(), consumo.minutos())
-        return this.crearPaqueteActivo(
+        return this._crearPaqueteActivo(
             this.gb() - consumo.datos(this.appsIlimitadas()),
             this.minutos() - consumo.minutos(),
             this.fechaDeCompra(),
@@ -143,6 +144,18 @@ PaqueteActivo.prototype.constructor = PaqueteActivo;
 const PaqueteNulo = function () {
     this.chequearVencidoAgotado = function () {
         return
+    }
+
+    this.vencidoAgotado = function () {
+        throw new Error("Un paquete nulo no puede estar vencido/agotado. No se puede renovar.")
+    }
+
+    this.duplicadoActivo = function () {
+        throw new Error("No se puede adquirir/renovar un paquete nulo")
+    }
+
+    this.duplicadoInactivo = function () {
+        throw new Error("No se puede adquirir/renovar un paquete nulo")
     }
 
     this.consumir = function () {
