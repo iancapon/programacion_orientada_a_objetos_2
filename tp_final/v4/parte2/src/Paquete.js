@@ -81,11 +81,11 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
     }
 
     this.chequearSiSePuedePrestar = function (datos, minutos) {
-        if (this.gb() < datos || this.minutos() < minutos) {
-            throw new Error("No alcanzan los datos / minutos que se desean prestar")
-        }
         if (datos < 0 || minutos < 0) {
             throw new Error("Se tiene que ingresar una cantidad positiva a los datos / minutos prestados")
+        }
+        if (this.gb() < datos || this.minutos() < minutos) {
+            throw new Error("No alcanzan los datos / minutos que se desean prestar")
         }
     }
 
@@ -119,13 +119,17 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
         )
     }
 
-    this.consumir = function (consumo) {
-        if (this.gb() < consumo.datos()) {
+    this.chequearSiSePuedeConsumir = function (datos, minutos) {
+        if (this.gb() < datos) {
             throw new Error("Cliente no puede consumir datos que no tiene.")
         }
-        if (this.minutos() < consumo.minutos()) {
+        if (this.minutos() < minutos) {
             throw new Error("Cliente no puede consumir minutos que no tiene.")
         }
+    }
+
+    this.consumir = function (consumo) {
+        this.chequearSiSePuedeConsumir(consumo.datos(), consumo.minutos())
         return this.crearPaqueteActivo(
             this.gb() - consumo.datos(this.appsIlimitadas()),
             this.minutos() - consumo.minutos(),

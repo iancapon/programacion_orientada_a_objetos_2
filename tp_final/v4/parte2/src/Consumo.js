@@ -3,6 +3,7 @@ const Consumo = function (inicio, fin) {
     this.fechaDeFin = () => fin
     this.datos = () => 0
     this.minutos = () => 0
+    this.app = () => "No se registró"
 
     this.datosImportantes = function () {
         return { "Consumo": "No hubo consumo", "inicio": this.fechaDeInicio(), "fin": this.fechaDeFin() }
@@ -27,7 +28,7 @@ const ConsumoDatos = function (datos, inicio, fin) {
     this.datos = () => datos
 
     this.datosImportantes = function () {
-        return { "datos": this.datos(), "inicio": this.fechaDeInicio(), "fin": this.fechaDeFin() }
+        return { "app": this.app(), "datos": this.datos(), "inicio": this.fechaDeInicio(), "fin": this.fechaDeFin() }
     }
 }
 

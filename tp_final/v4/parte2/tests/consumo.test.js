@@ -137,13 +137,13 @@ describe("Cliente usa su paquete, ingresando consumos y chequeando cuantos datos
 
         expect(sistema.consumosDe(ian, new Date("2025-07-25T14:00:00"))).toEqual([
             { "minutos": 80, "inicio": new Date("2025-07-18T13:00:00"), "fin": new Date("2025-07-18T14:00:00") },
-            { "datos": 50, "inicio": new Date("2025-07-20T13:00:00"), "fin": new Date("2025-07-20T14:00:00") },
+            { "app": "No se registró", "datos": 50, "inicio": new Date("2025-07-20T13:00:00"), "fin": new Date("2025-07-20T14:00:00") },
             { "minutos": 90, "inicio": new Date("2025-07-22T13:00:00"), "fin": new Date("2025-07-22T14:00:00") },
         ])
 
         expect(sistema.consumosDe(nico, new Date("2025-07-25T14:00:00"))).toEqual([
             { "minutos": 30, "inicio": new Date("2025-07-19T13:00:00"), "fin": new Date("2025-07-19T14:00:00") },
-            { "datos": 40, "inicio": new Date("2025-07-21T13:00:00"), "fin": new Date("2025-07-21T14:00:00") },
+            { "app": "No se registró", "datos": 40, "inicio": new Date("2025-07-21T13:00:00"), "fin": new Date("2025-07-21T14:00:00") },
             { "minutos": 100, "inicio": new Date("2025-07-23T13:00:00"), "fin": new Date("2025-07-23T14:00:00") },
         ])
     })
