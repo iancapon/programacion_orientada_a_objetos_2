@@ -17,7 +17,7 @@ const Paquete = function (nombre , precio , gb , minutos , duracion) {
         return this.nombre() == paqueteAChequear.nombre()
     }
 
-    this.paqueteInactivo = function(){
+    this.duplicadoInactivo = function(){
         return new Paquete(
             this.nombre(),
             this.precio(),
@@ -27,7 +27,7 @@ const Paquete = function (nombre , precio , gb , minutos , duracion) {
         )
     }
 
-    this.duplicado = function (fecha) {
+    this.duplicadoActivo = function (fecha) {
         return new PaqueteActivo(
             this.nombre(),
             this.precio(),

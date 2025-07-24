@@ -1,10 +1,13 @@
 const Paquete = function (nombre, precio, gb, minutos, duracion, appsIlimitadas) {
     this.nombre = () => nombre
+    this.id = () => nombre
     this.gb = () => gb
     this.minutos = () => minutos
     this.duracion = () => duracion
     this.precio = () => precio
     this.appsIlimitadas = () => appsIlimitadas
+
+    this.mismaId = (id)=> id == this.id()
 
     this.informacionDelPaquete = function () {
         return {
@@ -15,11 +18,11 @@ const Paquete = function (nombre, precio, gb, minutos, duracion, appsIlimitadas)
         }
     }
 
-    this.soyElMismoPaquete = function (paqueteAChequear) {
-        return this.nombre() == paqueteAChequear.nombre()
+    this.soyElMismoPaquete = function (otro) {
+        return otro.mismaId(this.id())
     }
 
-    this.paqueteInactivo = function () {
+    this.duplicadoInactivo = function () {
         return new Paquete(
             this.nombre(),
             this.precio(),

@@ -5,7 +5,8 @@ const Cliente = function (nombre, linea, fechaActual) {
     this.nombre = () => nombre
     this.linea = () => linea
     this.cuenta = new Cuenta()
-    this.paquete = new PaqueteNulo()
+    this.paqueteActivo = new PaqueteNulo()
+    this.paqueteInactivo = new PaqueteNulo()
     this.fecha = fechaActual
     this.renovarAutomaticamente = false
 
@@ -19,21 +20,21 @@ const Cliente = function (nombre, linea, fechaActual) {
     this.renovarSiSeHaAgotado = function () {
         if (!this.renovarAutomaticamente) {
             return
-        } if (this.paquete.vencido() || this.paquete.agotado()) {
-            this.cuenta.debitar(this.paquete.precio())
-            this.paquete = this.paquete.duplicado(this.fecha)
+        } if (this.paqueteActivo.vencido() || this.paqueteActivo.agotado()) {
+            this.cuenta.debitar(this.paqueteInactivo.precio())
+            this.paqueteActivo = this.paqueteInactivo.duplicadoActivo(this.fecha)
         }
     }
 
 
     this.consume = function (consumo) {
         this.renovarSiSeHaAgotado()
-        this.paquete = this.paquete.consumir(consumo)
+        this.paqueteActivo = this.paqueteActivo.consumir(consumo)
     }
 
     this.quedaDisponible = function () {
         this.renovarSiSeHaAgotado()
-        return this.paquete.informacionDelPaquete(this.fecha)
+        return this.paqueteActivo.informacionDelPaquete(this.fecha)
     }
 
     this.cargaDineroEnCuenta = function (dinero) {
@@ -41,11 +42,12 @@ const Cliente = function (nombre, linea, fechaActual) {
     }
 
     this.compraPaquete = function (paquete) {
-        this.paquete.chequearVencidoAgotado()
+        this.paqueteActivo.chequearVencidoAgotado()
         this.cuenta.debitar(paquete.precio())
-        this.paquete = paquete.duplicado(this.fecha)
+        this.paqueteActivo = paquete.duplicadoActivo(this.fecha)
+        this.paqueteInactivo = paquete.duplicadoInactivo()
 
-        return this.paquete
+        return this.paqueteActivo
     }
 
     this.soyElMismoCliente = function (clienteAChequear) {

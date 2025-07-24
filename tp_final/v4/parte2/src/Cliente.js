@@ -5,7 +5,8 @@ const Cliente = function (nombre, linea, fechaActual) {
     this.nombre = () => nombre
     this.linea = () => linea
     const cuenta = new Cuenta()
-    this.paquete = new PaqueteNulo()
+    this.paqueteActivo = new PaqueteNulo()
+    this.paqueteInactivo = new PaqueteNulo()
     this.fecha = () => fechaActual
     this.renovarAutomaticamente = false
 
@@ -17,34 +18,33 @@ const Cliente = function (nombre, linea, fechaActual) {
     this.desactivarRenovacionAutomatica = () => this.renovarAutomaticamente = false
 
     this.recibirDatosMinutosEmprestados = function (clienteEmisor, datos, minutos) {
-        this.paquete.chequearVencidoAgotado()
+        this.paqueteActivo.chequearVencidoAgotado()
         const datosPrestados = clienteEmisor.tomarDatosPrestados(datos, minutos)
-        this.paquete = this.paquete.sumarPlanCambiandoVencimiento(datosPrestados)
+        this.paqueteActivo = this.paqueteActivo.sumarPlanCambiandoVencimiento(datosPrestados)
     }
 
     this.tomarDatosPrestados = function (datos, minutos) {
-        const paquetesNuevos = this.paquete.prestarDatosMinutos(datos, minutos)
-        this.paquete = paquetesNuevos.datosResultantesDelQuePresta
+        const paquetesNuevos = this.paqueteActivo.prestarDatosMinutos(datos, minutos)
+        this.paqueteActivo = paquetesNuevos.datosResultantesDelQuePresta
 
         return paquetesNuevos.datosResultantesPrestados
     }
 
-
     this.renovarSiSeHaAgotado = function () {
-        if (this.renovarAutomaticamente && this.paquete.vencidoAgotado()) {
-            cuenta.debitar(this.paquete.precio())
-            this.paquete = this.paquete.duplicadoActivo(this.fecha())
+        if (this.renovarAutomaticamente && this.paqueteActivo.vencidoAgotado()) {
+            cuenta.debitar(this.paqueteInactivo.precio())
+            this.paqueteActivo = this.paqueteInactivo.duplicadoActivo(this.fecha())
         }
     }
 
     this.consume = function (consumo) {
         this.renovarSiSeHaAgotado()
-        this.paquete = this.paquete.consumir(consumo)
+        this.paqueteActivo = this.paqueteActivo.consumir(consumo)
     }
 
     this.quedaDisponible = function () {
         this.renovarSiSeHaAgotado()
-        return this.paquete.informacionDelPaquete(this.fecha())
+        return this.paqueteActivo.informacionDelPaquete(this.fecha())
     }
 
     this.cargaDineroEnCuenta = function (dinero) {
@@ -52,11 +52,12 @@ const Cliente = function (nombre, linea, fechaActual) {
     }
 
     this.compraPaquete = function (paquete) {
-        this.paquete.chequearVencidoAgotado()
+        this.paqueteActivo.chequearVencidoAgotado()
         cuenta.debitar(paquete.precio())
-        this.paquete = paquete.duplicadoActivo(this.fecha())
+        this.paqueteActivo = paquete.duplicadoActivo(this.fecha())
+        this.paqueteInactivo = paquete.duplicadoInactivo()
 
-        return this.paquete
+        return this.paqueteActivo
     }
 
     this.soyElMismoCliente = function (clienteAChequear) {

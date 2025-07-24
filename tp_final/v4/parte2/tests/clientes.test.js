@@ -1,6 +1,6 @@
 const Sistema = require("../src/Sistema")
 const Cliente = require("../src/Cliente")
-const { Paquete} = require("../src/Paquete")
+const { Paquete } = require("../src/Paquete")
 const { ConsumoDatos, ConsumoMinutos } = require("../src/Consumo")
 
 
@@ -81,11 +81,12 @@ describe("Cliente adquiere paquetes", () => {
         sistema.activarRenovacionAutomaticaParaCliente(cliente)
         sistema.clienteCargaDineroEnCuenta(cliente, 2000, fecha1)
         sistema.clienteCompraPaquete(cliente, paquete, fecha1)
+        sistema.clienteConsume(cliente, new ConsumoDatos(800, fecha1, fecha1))
 
         expect(sistema.clienteQuiereSaberCuantoLeQuedaDisponible(cliente, new Date("2025-08-16T12:00:00"))).toEqual({
             "Dias hasta que venza: ": 1,
             "Fecha de compra: ": new Date("2025-07-18T12:00:00"),
-            "GB disponibles: ": 1000,
+            "GB disponibles: ": 200,
             "minutos disponibles: ": 1000,
             "apps ilimitadas": []
         })
