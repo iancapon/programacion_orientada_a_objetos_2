@@ -2,6 +2,7 @@ const Sistema = require("../src/Sistema")
 const Cliente = require("../src/Cliente")
 const { Paquete } = require("../src/Paquete")
 const { ConsumoDatos, ConsumoMinutos, ConsumoApp } = require("../src/Consumo")
+const { App } = require("../src/App")
 
 describe("Cliente intenta usar un paquete sin haberlo comprado", () => {
     test("001 Cliente intenta consumir sin haber comprado un paquete.", () => {
@@ -153,7 +154,7 @@ describe("Cliente usa su paquete, ingresando consumos y chequeando cuantos datos
         const cliente = new Cliente(nombre = "ian", linea = 12345678)
         const paquete = new Paquete("Paquete Basico", costo = 1000, datos = 1000, minutos = 1000, duracion = 30, [])
         const sistema = new Sistema(fecha, [cliente], [paquete])
-        const consumo = new ConsumoApp(app = "whatsapp", datos = 80, inicio = new Date("2025-07-18T13:00:00"), fin = new Date("2025-07-18T14:00:00"))
+        const consumo = new ConsumoApp(app = new App("whatsapp"), datos = 80, inicio = new Date("2025-07-18T13:00:00"), fin = new Date("2025-07-18T14:00:00"))
 
         sistema.clienteCargaDineroEnCuenta(cliente, dinero = 1000, fecha)
         sistema.clienteCompraPaquete(cliente, paquete, fecha)
@@ -175,9 +176,9 @@ describe("Cliente usa su paquete, ingresando consumos y chequeando cuantos datos
     test("010 Consumo de app de uso ilimitado", () => {
         const fecha = new Date("2025-07-18T12:00:00");
         const cliente = new Cliente(nombre = "ian", linea = 12345678)
-        const paquete = new Paquete("Paquete Especial", costo = 1000, datos = 1000, minutos = 1000, duracion = 30, ["whatsapp", "linkedin"])
+        const paquete = new Paquete("Paquete Especial", costo = 1000, datos = 1000, minutos = 1000, duracion = 30, [new App("whatsapp"), new App("linkedin")])
         const sistema = new Sistema(fecha, [cliente], [paquete])
-        const consumo = new ConsumoApp(app = "whatsapp", datos = 80, inicio = new Date("2025-07-18T13:00:00"), fin = new Date("2025-07-18T14:00:00"))
+        const consumo = new ConsumoApp(app = new App("whatsapp"), datos = 80, inicio = new Date("2025-07-18T13:00:00"), fin = new Date("2025-07-18T14:00:00"))
 
         sistema.clienteCargaDineroEnCuenta(cliente, dinero = 1000, fecha)
         sistema.clienteCompraPaquete(cliente, paquete, fecha)

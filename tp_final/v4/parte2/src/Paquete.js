@@ -63,7 +63,7 @@ const PaqueteActivo = function (nombre, precio, gb, minutos, duracion, fechaDeCo
             "GB disponibles: ": this.gb(),
             "minutos disponibles: ": this.minutos(),
             "Dias hasta que venza: ": this.diasHastaQueVenza(),
-            "apps ilimitadas": this.appsIlimitadas()
+            "apps ilimitadas": this.appsIlimitadas().map(app => app.nombre())
         }
     }
 

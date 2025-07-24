@@ -2,6 +2,7 @@ const Sistema = require("../src/Sistema")
 const Cliente = require("../src/Cliente")
 const { Paquete } = require("../src/Paquete")
 const { ConsumoDatos, ConsumoMinutos } = require("../src/Consumo")
+const { App } = require("../src/App")
 
 
 describe("Cliente adquiere paquetes", () => {
@@ -102,7 +103,7 @@ describe("Cliente adquiere paquetes", () => {
     test("006 Cliente compra paquete con apps de uso ilimitado", () => {
         const fecha = new Date("2025-07-18T12:00:00");
         const cliente = new Cliente(nombre = "ian", linea = 12345678)
-        const paquete = new Paquete("Paquete Especial", costo = 1000, datos = 1000, minutos = 1000, duracion = 30, ["whatsapp", "linkedin"])
+        const paquete = new Paquete("Paquete Especial", costo = 1000, datos = 1000, minutos = 1000, duracion = 30, [new App("whatsapp"), new App("linkedin")])
         const sistema = new Sistema(fecha, [cliente], [paquete])
 
         sistema.clienteCargaDineroEnCuenta(cliente, dinero = 1000, fecha)

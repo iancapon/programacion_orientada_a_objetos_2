@@ -1,19 +1,21 @@
+const { AppNula } = require("./App")
+
 const Consumo = function (inicio, fin) {
     this.fechaDeInicio = () => inicio
     this.fechaDeFin = () => fin
     this.datos = () => 0
     this.minutos = () => 0
-    this.app = () => "No se registró"
+    this.app = () => new AppNula()
 
     this.datosImportantes = function () {
-        return { "app": this.app(), "datos": this.datos(), "minutos": this.minutos(), "inicio": this.fechaDeInicio(), "fin": this.fechaDeFin() }
+        return { "app": this.app().nombre(), "datos": this.datos(), "minutos": this.minutos(), "inicio": this.fechaDeInicio(), "fin": this.fechaDeFin() }
     }
 }
 
-const ConsumoApp = function (app, datos, inicio, fin) {
+const ConsumoApp = function (aplicacion, datos, inicio, fin) {
     Consumo.call(this, inicio, fin);
-    this.datos = (listaDeAppsIlimitadas = []) => listaDeAppsIlimitadas.includes(app) ? 0 : datos
-    this.app = () => app
+    this.datos = (listaDeAppsIlimitadas = []) => listaDeAppsIlimitadas.find(app => app.es(aplicacion)) ? 0 : datos
+    this.app = () => aplicacion
 }
 
 ConsumoApp.prototype = Object.create(Consumo.prototype);
