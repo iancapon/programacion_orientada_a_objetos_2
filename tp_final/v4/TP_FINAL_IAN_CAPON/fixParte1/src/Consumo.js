@@ -1,5 +1,5 @@
 const Consumo = function (minutos, megabytes, duracion) {
-    this.resumen = (horaDelRegistro) => { //el consumo llega al sistema una vez terminó
+    this.resumen = (horaDelRegistro) => {
         const MILISaSEGUNDOS = 1000
 
         return {
@@ -9,6 +9,12 @@ const Consumo = function (minutos, megabytes, duracion) {
             fin: horaDelRegistro
         }
     }
+
+    this.aplicar = (paquete) => {
+        paquete.consumirMinutos(minutos)
+        paquete.consumirMegabytes(megabytes)
+    }
+
 }
 
 module.exports = Consumo

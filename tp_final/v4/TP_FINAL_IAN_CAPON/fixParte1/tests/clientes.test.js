@@ -90,7 +90,7 @@ test("006 cliente ve su estado de linea, sin tener un paquete", () => {
 
 })
 
-test("008 cliente efectua un consumo, lo ve reflejado en el estado de su linea", () => {
+test("007 cliente efectua un consumo, lo ve reflejado en el estado de su linea", () => {
     const relojMock = {
         ahora: jest.fn()
             .mockReturnValueOnce(new Date("12/12/2012"))
@@ -114,6 +114,28 @@ test("008 cliente efectua un consumo, lo ve reflejado en el estado de su linea",
         diasHastaVencimiento: 18,
         fechaDeActivacion: new Date("12/12/2012"),
     })
+
+})
+
+test("008 cliente no puede efectuar un consumo mayor de lo que tenga disponible el paquete", () => {
+    const relojMock = {
+        ahora: jest.fn()
+            .mockReturnValueOnce(new Date("12/12/2012"))
+            .mockReturnValue(new Date("12/24/2012"))
+    }
+    const cuentaReal = new Cuenta()
+    const paqueteBasico = new Paquete(precio = 1000, minutos = 100, megabytes = 4000, dias = 30)
+    const ian = new Cliente(nombre = "ian capon", linea = 1133492294, cuenta = cuentaReal, reloj = relojMock)
+
+    const consumoMinutosDeMas = new Consumo(minutos = 200, megabytes = 0, duracion = 60)
+    const consumoMegabytesDeMas = new Consumo(minutos = 0, megabytes = 8000, duracion = 60)
+
+    ian.cargar(2000)
+    ian.comprarPaquete(paqueteBasico)
+
+    expect(() => ian.consume(consumoMinutosDeMas)).toThrow(new Error("No se puede consumir esa cantidad."))
+    expect(() => ian.consume(consumoMegabytesDeMas)).toThrow(new Error("No se puede consumir esa cantidad."))
+
 
 })
 
@@ -142,7 +164,7 @@ test("009 cliente efectua varios consumos, los ve reflejados en el registro de c
     expect(relojMock.ahora).toHaveReturnedWith(new Date("12/25/2012"))
     expect(relojMock.ahora).toHaveReturnedWith(new Date("12/26/2012"))
 
-    expect(ian.consumosHastaLaFecha()).toEqual([
+    expect(ian.consumosHastaLaFecha(inicio = new Date("12/23/12"), fin = new Date("12/27/12"))).toEqual([
         {
             minutos: 10,
             megabytes: 20,
@@ -176,7 +198,8 @@ test("010 cliente no puede comprar paquete antes de que se venza el actual", () 
     const ian = new Cliente(nombre = "ian capon", linea = 1133492294, cuenta = cuentaReal, reloj = relojMock)
 
     ian.cargar(2000)
-    expect(() => ian.comprarPaquete(paqueteBasico)).not.toThrow(new Error("El paquete sigue activo."))
+    ian.comprarPaquete(paqueteBasico)
+
     expect(relojMock.ahora).toHaveReturnedWith(new Date("12/12/2012"))
 
     expect(() => ian.comprarPaquete(paqueteBasico)).toThrow(new Error("El paquete sigue activo."))
@@ -194,7 +217,8 @@ test("011 cliente compra un paquete nuevo cuando ya se venció el anterior", () 
     const ian = new Cliente(nombre = "ian capon", linea = 1133492294, cuenta = cuentaReal, reloj = relojMock)
 
     ian.cargar(2000)
-    expect(() => ian.comprarPaquete(paqueteBasico)).not.toThrow(new Error("El paquete sigue activo."))
+    ian.comprarPaquete(paqueteBasico)
+
     expect(relojMock.ahora).toHaveReturnedWith(new Date("12/12/2012"))
 
     expect(() => ian.comprarPaquete(paqueteBasico)).not.toThrow(new Error("El paquete sigue activo."))
@@ -213,7 +237,8 @@ test("012 cliente compra un paquete nuevo cuando ya se agotó el actual", () => 
     const ian = new Cliente(nombre = "ian capon", linea = 1133492294, cuenta = cuentaReal, reloj = relojMock)
 
     ian.cargar(2000)
-    expect(() => ian.comprarPaquete(paqueteBasico)).not.toThrow(new Error("El paquete sigue activo."))
+    ian.comprarPaquete(paqueteBasico)
+
     expect(relojMock.ahora).toHaveReturnedWith(new Date("12/12/2012"))
 
     expect(() => ian.comprarPaquete(paqueteBasico)).toThrow(new Error("El paquete sigue activo."))
@@ -223,4 +248,41 @@ test("012 cliente compra un paquete nuevo cuando ya se agotó el actual", () => 
 
     expect(relojMock.ahora).toHaveReturnedWith(new Date("12/24/2012"))
     expect(() => ian.comprarPaquete(paqueteBasico)).not.toThrow(new Error("El paquete sigue activo."))
+})
+
+test("013 configurar un paquete para renovarse automáticamente", () => {
+    const relojMock = {
+        ahora: jest.fn()
+            .mockReturnValueOnce(new Date("12/12/2012"))
+            .mockReturnValueOnce(new Date("01/11/2013"))
+            .mockReturnValueOnce(new Date("01/12/2013"))
+    }
+
+    const cuentaReal = new Cuenta()
+    const paqueteBasico = new Paquete(precio = 1000, minutos = 100, megabytes = 4000, dias = 30)
+    const ian = new Cliente(nombre = "ian capon", linea = 1133492294, cuenta = cuentaReal, reloj = relojMock)
+
+    ian.cargar(2000)
+
+    ian.comprarPaquete(paqueteBasico, autorenovado = true)
+    expect(relojMock.ahora).toHaveReturnedWith(new Date("12/12/2012"))
+
+    expect(ian.estado()).toEqual({
+        minutosRestantes: 100,
+        megabytesRestantes: 4000,
+        diasHastaVencimiento: 0,
+        fechaDeActivacion: new Date("12/12/2012"),
+    })
+    expect(relojMock.ahora).toHaveReturnedWith(new Date("01/11/2013"))
+
+
+    expect(ian.estado()).toEqual({
+        minutosRestantes: 100,
+        megabytesRestantes: 4000,
+        diasHastaVencimiento: 30,
+        fechaDeActivacion: new Date("01/12/2013"),
+    })
+
+    expect(relojMock.ahora).toHaveReturnedWith(new Date("01/11/2013"))
+
 })

@@ -24,7 +24,6 @@ test("002 confirmar que un paquete está vencido", () => {
             .mockReturnValueOnce(new Date("12/01/2013"))
     }
     const paqueteBasico = new Paquete(precio = 1000, minutos = 100, megabytes = 4000, dias = 30)
-    const paqueteActivoEsperado = new PaqueteActivo(100, 4000, dias = 30, new Date("12/12/2012"))
 
     const paqueteActivado = paqueteBasico.activo(relojMock.ahora())
 
@@ -48,7 +47,12 @@ test("003 confirmar que un paquete está agotado", () => {
         ahora: jest.fn()
             .mockReturnValue(new Date("12/12/2012"))
     }
-    const consumoMock = { minutos: 100, megabytes: 4000 }
+    const consumoMock = {
+        aplicar: (paquete) => {
+            paquete.consumirMinutos(100)
+            paquete.consumirMegabytes(4000)
+        }
+    }
     const paqueteBasico = new Paquete(precio = 1000, minutos = 100, megabytes = 4000, dias = 30)
 
     const paqueteActivado = paqueteBasico.activo(relojMock.ahora())
@@ -63,7 +67,7 @@ test("003 confirmar que un paquete está agotado", () => {
 
     expect(paqueteActivado.agotado()).toBe(false)
 
-    paqueteActivado.consumir(consumoMock)
+    consumoMock.aplicar(paqueteActivado)
 
     expect(paqueteActivado.agotado()).toBe(true)
 
