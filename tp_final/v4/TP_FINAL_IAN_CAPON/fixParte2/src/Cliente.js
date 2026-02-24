@@ -1,6 +1,7 @@
 const Cuenta = require("./Cuenta")
 const { PaqueteActivoNulo } = require("./Paquete")
 
+
 const Cliente = function (nombre = null, linea = null, cuenta = new Cuenta(), reloj) {
     if (!nombre || !linea) {
         throw new Error("Cliente no tiene los parámetros necesarios para ser válido.")
@@ -27,6 +28,25 @@ const Cliente = function (nombre = null, linea = null, cuenta = new Cuenta(), re
             return cumpleInicio && cumpleFin
         })
     }
+
+    this.prestaMegabytesA = function (otro, megabytes) {
+        otro.recibePrestamo(megabytes = megabytes, minutos = 0, paqueteDelOtro = this.paqueteActivo)
+        // anotar que prestó
+    }
+
+    this.prestaMinutosA = function (otro, minutos) {
+        otro.recibePrestamo(megabytes = 0, minutos = minutos, paqueteDelOtro = this.paqueteActivo)
+        // anotar que prestó
+    }
+
+    this.recibePrestamo = function (megabytes, minutos, paqueteDelOtro) {
+        const horaActual = this.horaActualHandler()
+        this.paqueteActivo.recibirPrestado(megabytes, minutos, horaActual, paqueteDelOtro)
+        this.paqueteActivo.fechaDeActivacion = paqueteDelOtro.fechaDeActivacion
+        // anotar que recibió prestado
+    }
+
+
 
     this.estado = () => {
         const horaActual = this.horaActualHandler()

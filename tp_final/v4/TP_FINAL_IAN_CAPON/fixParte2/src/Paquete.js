@@ -1,14 +1,15 @@
 const Recurso = function (montoFinal) {
-    this.montoActual = 0
-    this.monto = () => this.montoActual
-    this.renovar = () => { this.montoActual = 0 }
-    this.montoRestante = () => montoFinal - this.montoActual
+    this.montoActual = montoFinal
+    this.renovar = () => { this.montoActual = montoFinal }
+    this.montoRestante = () => this.montoActual
     this.consumir = (cantidad) => {
-        if (montoFinal - this.montoActual < cantidad) {
+        if (this.montoActual - cantidad < 0) {
             throw new Error("No se puede consumir esa cantidad.")
         }
-        this.montoActual += cantidad
+        this.montoActual -= cantidad
     }
+    this.recibirPrestado = (cantidad) => { this.montoActual += cantidad }
+
 }
 
 const PaqueteActivo = function (paquete, fechaDeActivacion, autorenovado, ilimitadas) {
@@ -26,6 +27,33 @@ const PaqueteActivo = function (paquete, fechaDeActivacion, autorenovado, ilimit
             return
         }
         this.megabytes.consumir(cantidad)
+    }
+
+    this.prestar = function (megabytes, minutos) {
+        if (this.megabytes.montoRestante() < megabytes || this.minutos.montoRestante() < minutos) {
+            throw new Error("El cliente no posee la cantidad que desea prestar.")
+        }
+        this.megabytes.consumir(megabytes)
+        this.minutos.consumir(minutos)
+    }
+
+    this.recibirPrestado = function (megabytes, minutos, horaActual, paqueteDelOtro) {
+        if (!(this.vencido(horaActual) || this.agotado())) {
+            throw new Error("El cliente que recibe el prestamo no tiene un paquete vencido o agotado.")
+        }
+        paqueteDelOtro.prestar(megabytes, minutos)
+        this.megabytes.recibirPrestado(megabytes)
+        this.minutos.recibirPrestado(minutos)
+        
+        return new PaqueteActivo(
+            new Paquete(
+                this.precio(),
+                this.minutos.montoRestante(),
+                this.megabytes.montoRestante(),
+                diasRestantes,
+                this.ilimitadas),
+
+        )
     }
 
     this.estado = function (fechaActual) {
@@ -70,6 +98,14 @@ const PaqueteActivoNulo = function () {
             megabytesRestantes: 0,
             diasHastaVencimiento: 0,
         }
+    }
+
+    this.prestar = () => {
+        throw new Error("El cliente no puede prestar nada si no compró un paquete.")
+    }
+
+    this.recibirPrestado = () => {
+        throw new Error("El cliente no puede aceptar un prestamo si no compró un paquete.")
     }
 }
 
