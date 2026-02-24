@@ -47,7 +47,7 @@ test("003 No se puede prestar si el cliente que recibe no compró un paquete en 
 
 })
 
-test("004 Un cliente presta datos, y minutos a otro.", () => {
+test("004 Un cliente presta megabytes a otro.", () => {
     relojMock.ahora.mockReturnValueOnce(new Date("01/01/2012"))
     relojMock.ahora.mockReturnValueOnce(new Date("01/06/2012"))
     relojMock.ahora.mockReturnValue(new Date("01/12/2012"))
@@ -56,17 +56,40 @@ test("004 Un cliente presta datos, y minutos a otro.", () => {
     nico.comprarPaquete(paquete)
 
     nico.prestaMegabytesA(ian, megabytes = 1000)
-    nico.prestaMinutosA(ian, minutos = 50)
 
     expect(nico.estado()).toEqual({
-        minutosRestantes: 50,
+        minutosRestantes: 100,
         megabytesRestantes: 3000,
         diasHastaVencimiento: 4,
         fechaDeActivacion: new Date("01/06/2012"),
     })
     expect(ian.estado()).toEqual({
-        minutosRestantes: 150,
+        minutosRestantes: 100,
         megabytesRestantes: 5000,
+        diasHastaVencimiento: 4,
+        fechaDeActivacion: new Date("01/06/2012"),
+    })
+})
+
+test("005 Un cliente presta minutos a otro.", () => {
+    relojMock.ahora.mockReturnValueOnce(new Date("01/01/2012"))
+    relojMock.ahora.mockReturnValueOnce(new Date("01/06/2012"))
+    relojMock.ahora.mockReturnValue(new Date("01/12/2012"))
+
+    ian.comprarPaquete(paquete)
+    nico.comprarPaquete(paquete)
+
+    nico.prestaMinutosA(ian, minutos = 50)
+
+    expect(nico.estado()).toEqual({
+        minutosRestantes: 50,
+        megabytesRestantes: 4000,
+        diasHastaVencimiento: 4,
+        fechaDeActivacion: new Date("01/06/2012"),
+    })
+    expect(ian.estado()).toEqual({
+        minutosRestantes: 150,
+        megabytesRestantes: 4000,
         diasHastaVencimiento: 4,
         fechaDeActivacion: new Date("01/06/2012"),
     })

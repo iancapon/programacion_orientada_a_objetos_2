@@ -44,16 +44,7 @@ const PaqueteActivo = function (paquete, fechaDeActivacion, autorenovado, ilimit
         paqueteDelOtro.prestar(megabytes, minutos)
         this.megabytes.recibirPrestado(megabytes)
         this.minutos.recibirPrestado(minutos)
-        
-        return new PaqueteActivo(
-            new Paquete(
-                this.precio(),
-                this.minutos.montoRestante(),
-                this.megabytes.montoRestante(),
-                diasRestantes,
-                this.ilimitadas),
-
-        )
+        this.fechaDeActivacion = paqueteDelOtro.fechaDeActivacion
     }
 
     this.estado = function (fechaActual) {

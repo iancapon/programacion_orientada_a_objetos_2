@@ -29,6 +29,8 @@ const Cliente = function (nombre = null, linea = null, cuenta = new Cuenta(), re
         })
     }
 
+    this.registroDeDatosPrestados = []
+
     this.prestaMegabytesA = function (otro, megabytes) {
         otro.recibePrestamo(megabytes = megabytes, minutos = 0, paqueteDelOtro = this.paqueteActivo)
         // anotar que prestó
@@ -42,7 +44,6 @@ const Cliente = function (nombre = null, linea = null, cuenta = new Cuenta(), re
     this.recibePrestamo = function (megabytes, minutos, paqueteDelOtro) {
         const horaActual = this.horaActualHandler()
         this.paqueteActivo.recibirPrestado(megabytes, minutos, horaActual, paqueteDelOtro)
-        this.paqueteActivo.fechaDeActivacion = paqueteDelOtro.fechaDeActivacion
         // anotar que recibió prestado
     }
 
